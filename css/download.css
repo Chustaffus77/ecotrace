@@ -1,0 +1,691 @@
+/* ==========================================================
+   FONTES PERSONALIZADAS
+========================================================== */
+@font-face {
+  font-family: "Caviar";
+  src: url("/fontes/CaviarDreams.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Caviar Bold";
+  src: url("/fontes/CaviarDreams_Bold.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Cham";
+  src: url("/fontes/Champagne & Limousines.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Cham Bold";
+  src: url("/fontes/Champagne & Limousines Bold.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Mont";
+  src: url("/fontes/Montserrat-VariableFont_wght.ttf") format("truetype");
+}
+
+/* ==========================================================
+   VARIÁVEIS GLOBAIS (TEMA)
+========================================================== */
+:root {
+  /* Cores base */
+  --primary: #00ffa7;
+  --primary-dark: #00c47f;
+  --accent: #364259;
+  --bg-1: #03241e;
+  --bg-2: #0a3a2f;
+  --white: #ffffff;
+  --text-light: #e1fff2;
+
+  /* Sombras e luz */
+  --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.25);
+  --shadow-hard: 0 8px 25px rgba(0, 0, 0, 0.35);
+  --glow: 0 0 15px rgba(0, 255, 167, 0.3);
+
+  /* Gradientes */
+  --gradient-primary: linear-gradient(45deg, #00ffa7, #5effd8);
+  --gradient-hero: linear-gradient(135deg, var(--bg-1) 0%, var(--bg-2) 100%);
+
+  /* Dimensões */
+  --radius: 14px;
+  --radius-lg: 22px;
+
+  /* Transição */
+  --transition: 0.25s ease-in-out;
+}
+
+/* ==========================================================
+   RESET E CONFIGURAÇÕES GLOBAIS
+========================================================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scrollbar-gutter: stable both-edges;
+  background-color: #364259;
+}
+
+/* ==========================================================
+   ESTRUTURA PRINCIPAL DO LAYOUT
+========================================================== */
+body {
+  background: var(--gradient-hero);
+  color: var(--white);
+  font-family: "Mont";
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Efeitos de fundo */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(0,255,167,0.12) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(54,66,89,0.12) 0%, transparent 50%);
+  z-index: -1;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwAgMAAACl9EEYAAAADFBMVEUAAAD///8AAAB/f39/f3+QXlIoAAAABHRSTlMAEBAgIDBwcOitgYsAAABISURBVHgBY2CYBUg4YGBgGAWjAQYGhgYmBiCwMDCAgxkRgYWhg3IDYDwwRDIwGg7DAwA0J8YUAwMAwxhNfZGHAAAz/QNoptJlIAAAAAElFTkSuQmCC");
+  opacity: 0.06;
+  z-index: -1;
+}
+
+/* ==========================================================
+   HEADER E NAVEGAÇÃO
+========================================================== */
+header {
+  background-color: #364259;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 10;
+}
+
+header nav {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+}
+
+header nav a {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: #dffff4;
+  font-weight: bold;
+  padding: 4px 0;
+  position: relative;
+  transition: 0.3s;
+}
+
+header nav a::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: #00ffa7;
+  transition: width 0.3s ease;
+}
+
+header nav a:hover {
+  color: #00ffa7;
+}
+
+header nav a:hover::after {
+  width: 100%;
+}
+
+img#logo {
+  display: block;
+  width: 150px;
+  padding: 5px;
+}
+
+/* ==========================================================
+   HERO SECTION
+========================================================== */
+.hero {
+  height: 55vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  padding: 0 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero img {
+  padding: 40px;
+  margin: 0 auto;
+  display: block;
+  position: relative;
+  overflow: hidden;
+  animation: fadeInUp 1s ease-in-out;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  width: 1200px;
+  height: 1200px;
+  background: radial-gradient(circle, rgba(13, 15, 14, 0.15) 0%, transparent 70%);
+  top: -300px;
+  left: -300px;
+  animation: pulse 6s infinite alternate ease-in-out;
+  filter: blur(80px);
+}
+
+.hero h1 {
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  font-weight: 800;
+  text-shadow: 0 0 20px rgba(0,0,0,0.4);
+  animation: fadeInUp 1s ease-out;
+}
+
+/* ==========================================================
+   CONTEÚDO PRINCIPAL
+========================================================== */
+.container {
+  max-width: 12000px;
+  margin: 5rem auto;
+  padding: 0 2rem;
+  display: grid;
+  gap: 2.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  align-items: stretch;
+}
+
+/* ==========================================================
+   CARDS/ARTIGOS
+========================================================== */
+article {
+  background: rgba(255,255,255,0.06);
+  backdrop-filter: blur(12px);
+  padding: 3rem;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+article::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 6px;
+  height: 100%;
+  background: var(--gradient-primary);
+  transition: var(--transition);
+}
+
+article:hover {
+  transform: translateY(-10px);
+  box-shadow: var(--shadow-hard);
+}
+
+article:hover::before {
+  width: 10px;
+}
+
+article h2 {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--primary);
+  position: relative;
+  margin-bottom: 1.4rem;
+}
+
+article p {
+  color: var(--text-light);
+  font-size: 1.15rem;
+  line-height: 1.8;
+}
+
+/* ==========================================================
+   COMPONENTES DE FORMULÁRIO
+========================================================== */
+img#eco {
+  text-align: center;
+  width: 800px;
+}
+
+a#eco {
+  text-align: justify;
+}
+
+/* ==========================================================
+   BOTÕES
+========================================================== */
+.btn-fancy {
+  --bg: #0c482e;
+  --bg-hover: #052b1b;
+  padding: 14px 32px;
+  background: var(--bg);
+  color: white;
+  font-weight: bold;
+  border-radius: var(--radius);
+  text-decoration: none;
+  display: inline-block;
+  box-shadow: var(--glow), var(--shadow-soft);
+  transition: var(--transition);
+}
+
+.btn-fancy:hover {
+  background: var(--bg-hover);
+  transform: translateY(-4px);
+  box-shadow: var(--glow), var(--shadow-hard);
+}
+
+.btn-fancy:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-soft);
+}
+
+.btn-fancy:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 4px;
+}
+
+/* ==========================================================
+   FOOTER
+========================================================== */
+footer {
+  text-align: center;
+  background: rgba(54, 66, 89, 0.75);
+  padding: 8px 15px;
+  color: var(--text-light);
+  margin-top: auto;
+  backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+/* ==========================================================
+   ANIMAÇÕES
+========================================================== */
+@keyframes pulse {
+  0% { 
+    transform: scale(1); 
+    opacity: .5; 
+  }
+  100% { 
+    transform: scale(1.25); 
+    opacity: .8; 
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ==========================================================
+   SCROLLBAR PERSONALIZADA
+========================================================== */
+*::-webkit-scrollbar {
+  width: 12px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #364259;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: #092b22;
+  border-radius: 10px;
+  border: 2px solid #0f0f0f;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #364259 #364259;
+}
+
+/* ==========================================================
+   RESPONSIVIDADE
+========================================================== */
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  nav {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .hero {
+    height: 70vh;
+  }
+
+  .container {
+    margin-top: 3rem;
+  }
+
+  article {
+    padding: 2rem;
+  }
+
+  img#eco {
+    width: 100%;
+    max-width: 600px;
+  }
+}
+
+@media (max-width: 480px) {
+  nav {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  nav a {
+    text-align: center;
+    width: 100%;
+  }
+
+  .hero h1 { 
+    font-size: 2rem; 
+  }
+
+  .container {
+    padding: 0 1rem;
+    gap: 1.5rem;
+  }
+
+  article {
+    padding: 1.5rem;
+  }
+
+  article h2 {
+    font-size: 1.8rem;
+  }
+}
+
+.downloads-hero {
+      height: 40vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      text-align: center;
+      padding: 0 2rem;
+      position: relative;
+      overflow: hidden;
+      margin-top: 60px;
+    }
+
+    .downloads-hero h1 {
+      font-size: clamp(2.5rem, 5vw, 3.5rem);
+      font-weight: 800;
+      text-shadow: 0 0 20px rgba(0,0,0,0.4);
+      animation: fadeInUp 1s ease-out;
+      margin-bottom: 1rem;
+    }
+
+    .downloads-hero p {
+      font-size: 1.2rem;
+      color: var(--text-light);
+      max-width: 600px;
+      margin: 0 auto;
+      animation: fadeInUp 1s ease-out 0.2s both;
+    }
+
+    .downloads-container {
+      max-width: 1200px;
+      margin: 3rem auto;
+      padding: 0 2rem;
+      display: grid;
+      gap: 2.5rem;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
+
+    .download-card {
+      background: rgba(255,255,255,0.06);
+      backdrop-filter: blur(12px);
+      padding: 2.5rem;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-soft);
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .download-card::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 6px;
+      height: 100%;
+      background: var(--gradient-primary);
+      transition: var(--transition);
+    }
+
+    .download-card:hover {
+      transform: translateY(-10px);
+      box-shadow: var(--shadow-hard);
+    }
+
+    .download-card:hover::before {
+      width: 10px;
+    }
+
+    .download-icon {
+      width: 80px;
+      height: 80px;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 255, 167, 0.1);
+      border-radius: 50%;
+      transition: var(--transition);
+    }
+
+    .download-card:hover .download-icon {
+      transform: scale(1.1);
+      background: rgba(0, 255, 167, 0.2);
+    }
+
+    .download-icon svg {
+      width: 40px;
+      height: 40px;
+      fill: var(--primary);
+    }
+
+    .download-card h3 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 1rem;
+    }
+
+    .download-card p {
+      color: var(--text-light);
+      margin-bottom: 1.5rem;
+      line-height: 1.6;
+    }
+
+    .download-info {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      margin-bottom: 1.5rem;
+      font-size: 0.9rem;
+      color: var(--text-light);
+    }
+
+    .download-info span {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .download-btn {
+      padding: 12px 28px;
+      background: var(--gradient-primary);
+      color: var(--bg-1);
+      font-weight: bold;
+      border-radius: var(--radius);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: var(--glow), var(--shadow-soft);
+      transition: var(--transition);
+      margin-top: auto;
+    }
+
+    .download-btn:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--glow), var(--shadow-hard);
+    }
+
+    .download-btn:active {
+      transform: translateY(0);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .download-btn svg {
+      width: 18px;
+      height: 18px;
+      fill: var(--bg-1);
+    }
+
+    .version-history {
+      max-width: 1200px;
+      margin: 5rem auto;
+      padding: 0 2rem;
+    }
+
+    .version-history h2 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--primary);
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .version-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .version-item {
+      background: rgba(255,255,255,0.04);
+      padding: 1.5rem;
+      border-radius: var(--radius);
+      border-left: 4px solid var(--primary);
+      transition: var(--transition);
+    }
+
+    .version-item:hover {
+      background: rgba(255,255,255,0.08);
+    }
+
+    .version-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+
+    .version-number {
+      font-weight: bold;
+      color: var(--primary);
+    }
+
+    .version-date {
+      color: var(--text-light);
+      font-size: 0.9rem;
+    }
+
+    .version-changes {
+      color: var(--text-light);
+      line-height: 1.6;
+    }
+
+    /* Animações específicas */
+    @keyframes pulseDownload {
+      0% { 
+        transform: scale(1); 
+      }
+      50% { 
+        transform: scale(1.05); 
+      }
+      100% { 
+        transform: scale(1); 
+      }
+    }
+
+    .pulse-animation {
+      animation: pulseDownload 2s infinite;
+    }
+
+    /* Responsividade */
+    @media (max-width: 768px) {
+      .downloads-hero {
+        height: auto;
+        padding: 4rem 1rem;
+      }
+
+      .downloads-container {
+        grid-template-columns: 1fr;
+      }
+
+      .download-info {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      .version-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+      }
+    }
+
+

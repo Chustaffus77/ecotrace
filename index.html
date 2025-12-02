@@ -8,61 +8,70 @@
   
   <link rel="icon" type="image/png" href="imagens/image-removebg-preview (1).png">
   <link rel="stylesheet" href="css/style.css">
+  
 </head>
 
 <body>
 
-   <header>
+
+  <header>
     <a id="eco" href="index.html">
       <img id="logo" src="/imagens/baixados.png" alt="ecotrace">
     </a>
 
     <nav>
       <a href="login_cadastro.html">Login</a>
-      <a href="Downloads.html">Downloads</a>
+      <a href="downloads.html">Downloads</a>
     </nav>
   </header>
 
-  <div class="video-bg">
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    
-</div>
-
   <section class="hero" id="inicio">
-   
     <h1>UM MUNDO SUSTENTÁVEL COMEÇA COM CONSCIÊNCIA</h1>
-
-     <img id="eco" src="/imagens/cin.png" alt="ecotrace">
+    <img id="eco" src="/imagens/cin.png" alt="ecotrace">
   </section>
 
-
-
   <div class="container">
-    <article id=" ecotrace">
+    <article id="ecotrace">
       <h2>O que é a Ecotrace?</h2>
-        <p>Lorem ipsum dol inceptos himenaeos.Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos. </p>
+      <p>Lorem ipsum dol inceptos himenaeos.Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.</p>
     </article>
     <article id="pq">
-      <h2>O que é a Ecotrace?</h2>
-        <p>Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.</p>
-        <br>
-        <a class="btn-fancy" href="forms.html">INICIE AQUI O SEU TESTE</a>
+      <h2>Por que escolher a Ecotrace?</h2>
+      <p>Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.</p>
+      <br>
+      <a class="btn-fancy" href="forms.html">INICIE AQUI O SEU TESTE</a>
     </article>
   </div>
-
-
 
   <footer>
     © 2025 EcoTrace — Tecnologia e Sustentabilidade
   </footer>
 
+  <script>
+    // Script para garantir que o vídeo funcione corretamente em dispositivos móveis
+    document.addEventListener('DOMContentLoaded', function() {
+      const video = document.querySelector('video');
+      
+      // Reiniciar o vídeo se ele parar (para alguns navegadores móveis)
+      video.addEventListener('ended', function() {
+        video.play();
+      });
+      
+      // Tentar reproduzir o vídeo mesmo com políticas de autoplay restritivas
+      const playVideo = () => {
+        video.play().catch(error => {
+          console.log('Autoplay bloqueado, tentando reproduzir com interação do usuário');
+        });
+      };
+      
+      // Tentar reproduzir após um pequeno delay
+      setTimeout(playVideo, 100);
+      
+      // Tentar reproduzir quando o usuário interagir com a página
+      document.addEventListener('click', playVideo);
+      document.addEventListener('scroll', playVideo);
+    });
+  </script>
+
 </body>
-
-
-
 </html>
