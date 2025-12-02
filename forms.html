@@ -105,18 +105,7 @@
         </div>
       </div>
 
-      <button onclick="gerarPDF()" 
-        style="
-            margin-top: 20px; 
-            padding: 10px 20px; 
-            background: #00ffa7; 
-            border: none; 
-            border-radius: 8px; 
-            cursor: pointer; 
-            font-size: 16px;">
-    📄 Baixar Diagnóstico em PDF
-</button>
-
+  
       <!-- FORMULÁRIO (inicialmente oculto) -->
       <div id="form-container" class="hidden">
         <div class="progress-text">Progresso: <span id="progress-percent">0%</span></div>
@@ -768,7 +757,7 @@ window.gerarPDF = gerarPDF;
             }
 
             if (!notificou) {
-                mostrarNotificacao(`Bem-vindo de volta, ${nome}!`);
+            
                 notificou = true;
             }
 
