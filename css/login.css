@@ -43,11 +43,13 @@ header {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 40px;
+  padding: 40px 20px;
 }
 
 header img {
-  width: 375px;
+  width: 100%;
+  max-width: 375px;
+  height: auto;
 }
 
 /* ====== MAIN ====== */
@@ -56,10 +58,13 @@ main {
   flex-direction: column;
   align-items: center;
   margin-top: 10px;
+  padding: 0 20px;
+  width: 100%;
 }
 
 .container {
-  width: 420px;
+  width: 100%;
+  max-width: 420px;
   text-align: center;
 }
 
@@ -67,8 +72,23 @@ main {
 .tab-buttons {
   display: flex;
   justify-content: center;
-  gap: 125px;
+  gap: 20px;
   margin-bottom: 30px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 480px) {
+  .tab-buttons {
+    gap: 15px;
+    margin-bottom: 25px;
+  }
+}
+
+@media (max-width: 350px) {
+  .tab-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
 }
 
 /* ====== TABS (AGORA ANIMADAS) ====== */
@@ -86,6 +106,15 @@ main {
     color .30s ease,
     transform .25s ease,
     box-shadow .25s ease;
+  min-width: 150px;
+}
+
+@media (max-width: 480px) {
+  .tab {
+    padding: 10px 25px;
+    font-size: 16px;
+    min-width: 130px;
+  }
 }
 
 /* Hover suave */
@@ -105,7 +134,7 @@ main {
 /* ====== TÍTULOS ====== */
 h2 {
   margin-bottom: 25px;
-  font-size: 32px;
+  font-size: clamp(24px, 5vw, 32px);
   font-weight: 700;
 }
 
@@ -131,6 +160,13 @@ input {
   font-size: 16px;
 }
 
+@media (max-width: 480px) {
+  input {
+    padding: 12px 15px;
+    font-size: 15px;
+  }
+}
+
 input::placeholder {
   color: #a3b7b0;
 }
@@ -139,7 +175,7 @@ input::placeholder {
 .btn-entrar, .btn-enviar {
   width: 100%;
   padding: 14px;
-  font-size: 20px;
+  font-size: clamp(18px, 4vw, 20px);
   font-weight: 700;
   border: none;
   border-radius: 40px;
@@ -163,6 +199,7 @@ input::placeholder {
 .divider span {
   margin: 0 auto;
   color: #a7b7b4;
+  font-size: clamp(14px, 3vw, 16px);
 }
 
 /* ====== LOGIN SOCIAL ====== */
@@ -171,6 +208,13 @@ input::placeholder {
   justify-content: center;
   gap: 20px;
   margin-bottom: 25px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 480px) {
+  .social-login {
+    gap: 15px;
+  }
 }
 
 .social-btn {
@@ -189,15 +233,24 @@ input::placeholder {
   transition: 0.3s;
 }
 
+@media (max-width: 480px) {
+  .social-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+  }
+}
+
 .social-btn:hover {
   transform: scale(1.1);
 }
 
 /* ====== CADASTRO — TEXTO DOS TERMOS ====== */
 .texto-termos {
-  font-size: 14px;
+  font-size: clamp(13px, 3vw, 14px);
   color: #9db4ad;
   margin: 15px 0;
+  line-height: 1.5;
 }
 
 .checkbox-termos {
@@ -206,11 +259,19 @@ input::placeholder {
   gap: 8px;
   font-size: 15px;
   margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 480px) {
+  .checkbox-termos {
+    font-size: 14px;
+  }
 }
 
 input[type="checkbox"] {
   width: 15px;
   height: 15px;
+  flex-shrink: 0;
 }
 
 /* ====== POPUP CORRIGIDO ====== */
@@ -224,6 +285,19 @@ input[type="checkbox"] {
   z-index: 10000;
   box-shadow: 0 0 15px rgba(0,0,0,0.3);
   max-width: 300px;
+  width: calc(100% - 50px);
+}
+
+@media (max-width: 480px) {
+  .popup {
+    top: 20px;
+    right: 20px;
+    left: 20px;
+    width: auto;
+    max-width: none;
+    padding: 12px 20px;
+    font-size: 14px;
+  }
 }
 
 .popup.ok {
@@ -256,6 +330,8 @@ input[type="checkbox"] {
   align-items: center;
   z-index: 9999;
   color: white;
+  text-align: center;
+  padding: 20px;
 }
 
 .loading.hidden {
@@ -272,6 +348,14 @@ input[type="checkbox"] {
   margin-bottom: 15px;
 }
 
+@media (max-width: 480px) {
+  .loading .spinner {
+    width: 40px;
+    height: 40px;
+    border-width: 4px;
+  }
+}
+
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
@@ -281,9 +365,9 @@ input[type="checkbox"] {
 footer {
   margin-top: auto;
   text-align: center;
-  padding: 25px;
+  padding: 25px 20px;
   color: #7fa39b;
-  font-size: 14px;
+  font-size: clamp(13px, 3vw, 14px);
 }
 
 /* =====================================================
@@ -353,4 +437,66 @@ footer {
   color: #000;
   border: 2px solid #ffaa00;
   font-weight: bold;
+}
+
+/* =====================================================
+   MELHORIAS DE RESPONSIVIDADE EXTRA
+===================================================== */
+
+/* Para telas muito pequenas (smartphones antigos) */
+@media (max-width: 320px) {
+  main {
+    padding: 0 15px;
+  }
+  
+  .tab {
+    padding: 10px 20px;
+    font-size: 15px;
+    min-width: 120px;
+  }
+  
+  h2 {
+    margin-bottom: 20px;
+  }
+  
+  .form-group {
+    margin-bottom: 18px;
+  }
+  
+  input {
+    padding: 10px 15px;
+  }
+}
+
+/* Para tablets e telas médias */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .container {
+    max-width: 500px;
+  }
+  
+  header img {
+    max-width: 450px;
+  }
+}
+
+/* Para telas grandes */
+@media (min-width: 1200px) {
+  .container {
+    max-width: 450px;
+  }
+}
+
+/* Ajuste de altura mínima para evitar problemas em telas pequenas */
+@media (max-height: 700px) {
+  body {
+    min-height: 700px;
+  }
+  
+  header {
+    padding: 20px;
+  }
+  
+  main {
+    margin-top: 0;
+  }
 }
