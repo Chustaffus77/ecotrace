@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>EcoTrace</title>
+  <link rel="icon" type="image/png" href="../imagens/image-removebg-preview (1).png">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+
+  <!-- Overlay -->
+  <div id="menu-overlay"></div>
+
+  <!-- Menu lateral -->
+  <div id="side-menu">
+      <h3 id="nome-usuario">{usuário}</h3>
+
+      <div id="menu-logado" style="display:none;">
+        <button id="logout-btn">Fazer Logoff</button>
+        <button id="admin-btn" style="display:none;">Dashboard Admin</button>
+      </div>
+<br>
+      <div id="menu-deslogado" style="display:none;">
+        <a href="login_cadastro.html">Fazer Login</a>
+      </div>
+
+      <button id="close-menu"></button>
+  </div>
+
+  <!-- HEADER -->
+  <header>
+    <a id="eco" href="index.html">
+      <img id="logo" src="../imagens/cin.png" alt="ecotrace">
+    </a>
+
+    <nav>
+        <a id="login" href="forms.html">
+          <img class="icone" src="../imagens/log.png" alt="login">
+        </a>
+        
+        <a id="downloads" href="downloads.html">
+          <img class="icone" src="../imagens/down.png" alt="downloads">
+        </a>
+
+        <a id="perfil">
+          <img class="icone" src="../imagens/perfil.png" alt="perfil">
+        </a>
+    </nav>
+  </header>
+
+  <section class="hero" id="inicio">
+    <div class="hero-content">
+      <h1>UM MUNDO SUSTENTÁVEL COMEÇA COM CONSCIÊNCIA</h1>
+      <img id="eco" src="../imagens/baixados.png" alt="ecotrace">
+    </div>
+  </section>
+
+  <div class="container">
+    <div class="left-column">
+      <article id="ecotrace">
+        <h2>O que é a Ecotrace?</h2>
+        <p>O Eco Trace é uma plataforma que ajuda empresas a identificar, analisar e compreender seus desafios de sustentabilidade, oferecendo uma visão clara e didática do problema para orientar decisões e construir soluções mais eficazes.</p>
+      </article>
+      <article id="pq">
+        <h2>Por que escolher a Ecotrace?</h2>
+        <p>Utilizar o Eco Trace significa ir além de simplesmente aplicar soluções prontas: é adotar uma ferramenta que capacita empresas de todos os portes a compreender, de forma clara e didática, os verdadeiros desafios relacionados à sustentabilidade. Ao revelar onde estão os pontos críticos e facilitar a análise do impacto ambiental, o Eco Trace permite que cada decisão seja tomada com consciência, precisão e responsabilidade. Assim, sua empresa não apenas atende às exigências atuais, mas fortalece sua imagem, aprimora seus processos e contribui de maneira efetiva para um futuro sustentável.</p>
+      </article>
+    </div>
+    <div class="right-column">
+      <article id="pq">
+        <h2>Mais informações</h2>
+        <p>Lorem ipsum dolor sit amet consectetur adipiscing elit...</p>
+        <br>
+        <a class="btn-fancy" href="forms.html">INICIE AQUI O SEU TESTE</a>
+      </article>
+    </div>
+  </div>
+
+  <footer>
+    © 2025 EcoTrace — Tecnologia e Sustentabilidade
+  </footer>
+
+  <!-- SCRIPT DO MENU LATERAL + FIREBASE -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+
+    // ==== SUA CONFIG DO FIREBASE ====
+    const firebaseConfig = {
+        apiKey: "AIzaSyAe7mU1MyCwrBmJlm89cKM-WHONzeqyU3w",
+        authDomain: "projeto-ecotrace.firebaseapp.com",
+        projectId: "projeto-ecotrace",
+        storageBucket: "projeto-ecotrace.firebasestorage.app",
+        messagingSenderId: "528782336744",
+        appId: "1:528782336744:web:1f4b1fa4807543ff225f5d",
+        measurementId: "G-RTWLGJD188"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const sideMenu = document.getElementById("side-menu");
+    const overlay = document.getElementById("menu-overlay");
+    const perfilBtn = document.getElementById("perfil");
+    const closeBtn = document.getElementById("close-menu");
+
+    const logadoDiv = document.getElementById("menu-logado");
+    const deslogadoDiv = document.getElementById("menu-deslogado");
+    const logoutBtn = document.getElementById("logout-btn");
+    const adminBtn = document.getElementById("admin-btn");
+    const nomeUsuarioH3 = document.getElementById("nome-usuario");
+
+    let notificou = false;
+
+    function mostrarNotificacao(texto) {
+        const notif = document.createElement("div");
+        notif.classList.add("notificacao");
+        notif.textContent = texto;
+        document.body.appendChild(notif);
+        setTimeout(() => notif.classList.add("show"), 100);
+        setTimeout(() => {
+            notif.classList.remove("show");
+            setTimeout(() => notif.remove(), 500);
+        }, 3500);
+    }
+
+    onAuthStateChanged(auth, async (user) => {
+        if (user) {
+            logadoDiv.style.display = "flex";
+            deslogadoDiv.style.display = "none";
+
+            const nome = user.displayName || user.email.split("@")[0];
+            nomeUsuarioH3.textContent = nome;
+
+            // 🔹 Verifica se o usuário é admin
+            const userDoc = await getDoc(doc(db, "usuarios", user.uid));
+            const role = userDoc.exists() ? userDoc.data().role : "user";
+
+            if (role === "admin" && adminBtn) {
+                adminBtn.style.display = "block";
+                adminBtn.onclick = () => window.location.href = "dashboard.html";
+            } else if (adminBtn) {
+                adminBtn.style.display = "none";
+            }
+
+            if (!notificou) {
+                mostrarNotificacao(`Bem-vindo de volta, ${nome}!`);
+                notificou = true;
+            }
+
+        } else {
+            logadoDiv.style.display = "none";
+            deslogadoDiv.style.display = "flex";
+            nomeUsuarioH3.textContent = "Visitante";
+            if (adminBtn) adminBtn.style.display = "none";
+        }
+    });
+
+    // 🔥 Logout
+    if (logoutBtn) {
+        logoutBtn.addEventListener("click", () => {
+            signOut(auth).then(() => {
+                window.location.href = "index.html";
+            });
+        });
+    }
+
+    // ===== Abertura/fechamento do menu =====
+    perfilBtn.addEventListener("click", () => {
+        sideMenu.classList.add("open");
+        overlay.classList.add("active");
+    });
+
+    closeBtn.addEventListener("click", () => {
+        sideMenu.classList.remove("open");
+        overlay.classList.remove("active");
+    });
+
+    overlay.addEventListener("click", () => {
+        sideMenu.classList.remove("open");
+        overlay.classList.remove("active");
+    });
+
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>EcoTrace - Identificação</title>
+  <link rel="stylesheet" href="../css/login.css">
+</head>
+<body>
+  <header>
+    <a id="eco" href="index.html">
+      <img id="logo" src="../imagens/cin.png" alt="ecotrace">
+    </a>
+  </header>
+
+<main>
+
+  <div class="container">
+    <div class="tab-buttons">
+      <button class="tab active" onclick="mostrarAba('login')">Login</button>
+      <button class="tab" onclick="mostrarAba('cadastro')">Cadastro</button>
+    </div>
+
+    <!-- POPUP -->
+    <div id="popup" class="popup hidden"></div>
+    <!-- Loading -->
+    <div id="loading" class="loading hidden">
+      <div class="spinner"></div>
+      <p>Processando...</p>
+    </div>
+
+
+
+
+    <form id="login" class="aba active">
+      <div id="log">
+        <h2>Entrar na Conta</h2>
+        <div class="form-group">
+          <label>Email:</label>
+          <input type="email" id="login-email" placeholder="seuemail@exemplo.com" required>
+        </div>
+
+        <div class="form-group">
+          <label>Senha:</label>
+          <input type="password" id="login-senha" placeholder="Sua senha" required>
+        </div>
+        
+        <button type="submit" class="btn-entrar">Entrar</button>
+
+        <div class="divider">
+          <span>Ou entre com</span>
+        </div>
+        
+        <div class="social-login">
+          <div class="social-btn google" onclick="loginGoogle()">G</div>
+          <div class="social-btn facebook" onclick="loginFacebook()">f</div>
+          <div class="social-btn microsoft" onclick="loginMicrosoft()">M</div>
+        </div>
+      </div>
+    </form>
+      
+    <form id="cadastro" class="aba">
+      <h2>Criar Conta</h2>
+
+      <div class="form-group">
+        <label>Nome:</label>
+        <input type="text" id="cadastro-nome" placeholder="Seu nome" required>
+      </div>
+
+      <div class="form-group">
+        <label>Email Corporativo:</label>
+        <input type="email" id="cadastro-email" placeholder="exemplo@empresa.com" required>
+      </div>
+
+      <div class="form-group">
+        <label>Senha:</label>
+        <input type="password" id="cadastro-senha" placeholder="Crie uma senha" required>
+      </div>
+      
+      <p class="texto-termos">
+        Ao criar sua conta, você concorda que algumas informações poderão ser coletadas
+        para melhorar sua experiência dentro da plataforma EcoTrace.
+      </p>
+
+      <label class="checkbox-termos">
+        <input type="checkbox" id="termos" required> Aceito os termos de uso.
+      </label>
+
+      <button type="submit" class="btn-enviar">Cadastrar</button>
+    </form>
+  </div>
+  
+</main>
+
+<footer>
+  © 2025 EcoTrace — Tecnologia e Sustentabilidade
+</footer>
+
+<script src="../js/script.js"> </script>
+
+
+</body>
+</html>

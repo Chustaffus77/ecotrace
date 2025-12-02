@@ -1,0 +1,811 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  
+  <title>EcoTrace</title>
+  
+  <link rel="icon" type="image/png" href="../imagens/image-removebg-preview (1).png">
+  <link rel="stylesheet" href="../css/diagnostico.css">
+
+ 
+  
+</head>
+
+<body>
+
+   <div id="menu-overlay"></div>
+
+  <!-- Menu lateral -->
+  <div id="side-menu">
+      <h3 id="nome-usuario">{usuário}</h3>
+
+      <div id="menu-logado" style="display:none;">
+        <button id="logout-btn">Fazer Logoff</button>
+        <button id="admin-btn" style="display:none;">Dashboard Admin</button>
+      </div>
+<br>
+      <div id="menu-deslogado" style="display:none;">
+        <a href="login_cadastro.html">Fazer Login</a>
+      </div>
+
+      <button id="close-menu"></button>
+  </div>
+
+  <!-- HEADER -->
+  <header>
+    <a id="eco" href="index.html">
+      <img id="logo" src="../imagens/cin.png" alt="ecotrace">
+    </a>
+
+    <nav>
+        <a id="login" href="forms.html">
+          <img class="icone" src="../imagens/log.png" alt="login">
+        </a>
+        
+        <a id="downloads" href="downloads.html">
+          <img class="icone" src="../imagens/down.png" alt="downloads">
+        </a>
+
+        <a id="perfil">
+          <img class="icone" src="../imagens/perfil.png" alt="perfil">
+        </a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="container">
+      <!-- TELA DE INTRODUÇÃO -->
+      <div id="intro-screen" class="intro-screen">
+        <img id="intro-icon" src="../imagens/image-removebg-preview (1).png" >
+        <h1 class="intro-title">Diagnóstico de Sustentabilidade</h1>
+        <p class="intro-subtitle">
+          Avalie o compromisso ambiental da sua empresa e receba um relatório personalizado 
+          com recomendações para melhorar suas práticas sustentáveis.
+        </p>
+
+        <div class="intro-features">
+          <div class="feature">
+            <h3>📊 Avaliação Completa</h3>
+            <p>10 áreas essenciais da sustentabilidade empresarial analisadas de forma detalhada.</p>
+          </div>
+          <div class="feature">
+            <h3>🎯 Recomendações Personalizadas</h3>
+            <p>Receba sugestões específicas baseadas nas respostas da sua empresa.</p>
+          </div>
+          <div class="feature">
+            <h3>📈 Plano de Ação</h3>
+            <p>Identifique pontos fortes e oportunidades de melhoria com métricas claras.</p>
+          </div>
+        </div>
+
+        <div class="intro-time">
+          <p>⏱️ Tempo estimado: 5-7 minutos</p>
+        </div>
+
+        <div class="intro-info">
+          <h3>Como funciona:</h3>
+          <ul style="text-align: left; max-width: 600px; margin: 20px auto; color: var(--text-light); line-height: 1.6;">
+            <li>Responda 10 perguntas sobre diferentes aspectos da sustentabilidade</li>
+            <li>Escolha a opção que melhor representa a realidade da sua empresa</li>
+            <li>Visualize sua pontuação e classificação final</li>
+            <li>Receba recomendações personalizadas para evoluir</li>
+            <li>Seus dados são processados localmente - nada é salvo em servidores</li>
+          </ul>
+        </div>
+
+        <div class="intro-buttons">
+          <button class="btn btn-start" onclick="iniciarQuestionario()">
+            Iniciar Diagnóstico
+          </button>
+          <button class="btn btn-cancel" onclick="voltarParaHome()">
+            Voltar para Home
+          </button>
+        </div>
+      </div>
+
+      <button onclick="gerarPDF()" 
+        style="
+            margin-top: 20px; 
+            padding: 10px 20px; 
+            background: #00ffa7; 
+            border: none; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            font-size: 16px;">
+    📄 Baixar Diagnóstico em PDF
+</button>
+
+      <!-- FORMULÁRIO (inicialmente oculto) -->
+      <div id="form-container" class="hidden">
+        <div class="progress-text">Progresso: <span id="progress-percent">0%</span></div>
+        <div class="progress-container">
+          <div class="progress-bar" id="progress-bar"></div>
+        </div>
+
+        <form id="formulario" novalidate>
+          <!-- PERGUNTA 1 -->
+          <fieldset class="active">
+            <legend>1. Nível de Prioridade</legend>
+            <div class="question">
+              <p>O quão voltada à Sustentabilidade sua empresa é?</p>
+              <div class="options">
+                <div class="option">
+                  <input type="radio" id="sustentabilidade-0" name="sustentabilidade" value="0" required>
+                  <label for="sustentabilidade-0">0 - Não é voltada</label>
+                </div>
+                <div class="option">
+                  <input type="radio" id="sustentabilidade-1" name="sustentabilidade" value="1">
+                  <label for="sustentabilidade-1">1 - Pequeno foco</label>
+                </div>
+                <div class="option">
+                  <input type="radio" id="sustentabilidade-2" name="sustentabilidade" value="2">
+                  <label for="sustentabilidade-2">2 - Procedimento padrão</label>
+                </div>
+                <div class="option">
+                  <input type="radio" id="sustentabilidade-3" name="sustentabilidade" value="3">
+                  <label for="sustentabilidade-3">3 - Prioriza</label>
+                </div>
+                <div class="option">
+                  <input type="radio" id="sustentabilidade-4" name="sustentabilidade" value="4">
+                  <label for="sustentabilidade-4">4 - Forte pilar</label>
+                </div>
+                <div class="option">
+                  <input type="radio" id="sustentabilidade-5" name="sustentabilidade" value="5">
+                  <label for="sustentabilidade-5">5 - Totalmente voltada</label>
+                </div>
+              </div>
+            </div>
+            <div class="navigation">
+              <button class="btn btn-prev" type="button" onclick="prevStep()">Anterior</button>
+              <button class="btn btn-next" type="button" onclick="nextStep()">Próximo</button>
+            </div>
+          </fieldset>
+
+          <!-- PERGUNTA 2 -->
+          <fieldset>
+            <legend>2. Energia</legend>
+            <div class="question">
+              <p>Qual é a principal fonte de energia da sua Empresa?</p>
+              <div class="options">
+                <div class="option">
+                  <input type="radio" id="energia-0" name="energia" value="0" required>
+                  <label for="energia-0">0 - Fontes Não Renováveis</label>
+                </div>
+                <div class="option">
+                  <input type="radio" id="energia-1" name="energia" value="1">
+                  <label for="energia-1">1 - Majoritariamente Não Renovável</label>
+                </div>
+                <div class="option">
+                  <input type="radio" id="energia-2" name="energia" value="2">
+                  <label for="energia-2">2 - Híbrido</label>
+                </div>
+                <div class="option">
+                  <input type="radio" id="energia-3" name="energia" value="3">
+                  <label for="energia-3">3 - Majoritariamente Renovável</label>
+                </div>
+                <div class="option">
+                  <input type="radio" id="energia-4" name="energia" value="4">
+                  <label for="energia-4">4 - Fontes Renováveis</label>
+                </div>
+                <div class="option">
+                  <input type="radio" id="energia-5" name="energia" value="5">
+                  <label for="energia-5">5 - Não definido</label>
+                </div>
+              </div>
+            </div>
+            <div class="navigation">
+              <button class="btn btn-prev" type="button" onclick="prevStep()">Anterior</button>
+              <button class="btn btn-next" type="button" onclick="nextStep()">Próximo</button>
+            </div>
+          </fieldset>
+
+          <!-- ... (as outras 8 perguntas permanecem iguais) ... -->
+          <!-- PERGUNTA 3 -->
+          <fieldset>
+            <legend>3. Água</legend>
+            <div class="question">
+              <p>Há monitoramento regular do consumo de água na produção?</p>
+              <div class="options">
+                <div class="option">
+                  <input type="radio" id="agua-0" name="agua" value="0" required>
+                  <label for="agua-0">0 - Não há monitoramento</label>
+                </div>
+                <div class="option">
+                  <input type="radio" id="agua-1" name="agua" value="1">
+                  <label for="agua-1">1 - Fraco</label>
+                </div>
+                <div class="option">
+                  <input type="radio" id="agua-2" name="agua" value="2">
+                  <label for="agua-2">2 - Regular</label>
+                </div>
+                <div class="option">
+                  <input type="radio" id="agua-3" name="agua" value="3">
+                  <label for="agua-3">3 - Forte</label>
+                </div>
+                <div class="option">
+                  <input type="radio" id="agua-4" name="agua" value="4">
+                  <label for="agua-4">4 - Prioridade</label>
+                </div>
+                <div class="option">
+                  <input type="radio" id="agua-5" name="agua" value="5">
+                  <label for="agua-5">5 - Avançado</label>
+                </div>
+              </div>
+            </div>
+            <div class="navigation">
+              <button class="btn btn-prev" type="button" onclick="prevStep()">Anterior</button>
+              <button class="btn btn-next" type="button" onclick="nextStep()">Próximo</button>
+            </div>
+          </fieldset>
+
+          
+           <!-- PERGUNTA 4 -->
+        <fieldset>
+          <legend>4. Resíduos</legend>
+          <div class="question">
+            <p>Como é feito o gerenciamento dos resíduos gerados pela produção?</p>
+            <div class="options">
+              <div class="option">
+                <input type="radio" id="residuos-0" name="residuos" value="0" required>
+                <label for="residuos-0">0 - Não há gestão</label>
+              </div>
+              <div class="option">
+                <input type="radio" id="residuos-1" name="residuos" value="1">
+                <label for="residuos-1">1 - Descarte básico</label>
+              </div>
+              <div class="option">
+                <input type="radio" id="residuos-2" name="residuos" value="2">
+                <label for="residuos-2">2 - Reciclagem parcial</label>
+              </div>
+              <div class="option">
+                <input type="radio" id="residuos-3" name="residuos" value="3">
+                <label for="residuos-3">3 - Plano estruturado</label>
+              </div>
+              <div class="option">
+                <input type="radio" id="residuos-4" name="residuos" value="4">
+                <label for="residuos-4">4 - Reuso e otimização</label>
+              </div>
+              <div class="option">
+                <input type="radio" id="residuos-5" name="residuos" value="5">
+                <label for="residuos-5">5 - Sistema completo e monitorado</label>
+              </div>
+            </div>
+          </div>
+          <div class="navigation">
+            <button class="btn btn-prev" type="button" onclick="prevStep()">Anterior</button>
+            <button class="btn btn-next" type="button" onclick="nextStep()">Próximo</button>
+          </div>
+        </fieldset>
+
+        <!-- PERGUNTA 5 -->
+        <fieldset>
+          <legend>5. Emissões Atmosféricas</legend>
+          <div class="question">
+            <p>A empresa controla e reduz as emissões de gases poluentes?</p>
+            <div class="options">
+              <div class="option">
+                <input type="radio" id="emissoes-0" name="emissoes" value="0" required>
+                <label for="emissoes-0">0 - Não há controle</label>
+              </div>
+              <div class="option">
+                <input type="radio" id="emissoes-1" name="emissoes" value="1">
+                <label for="emissoes-1">1 - Monitoramento esporádico</label>
+              </div>
+              <div class="option">
+                <input type="radio" id="emissoes-2" name="emissoes" value="2">
+                <label for="emissoes-2">2 - Controle básico</label>
+              </div>
+              <div class="option">
+                <input type="radio" id="emissoes-3" name="emissoes" value="3">
+                <label for="emissoes-3">3 - Sistema de filtragem</label>
+              </div>
+              <div class="option">
+                <input type="radio" id="emissoes-4" name="emissoes" value="4">
+                <label for="emissoes-4">4 - Redução ativa de poluentes</label>
+              </div>
+              <div class="option">
+                <input type="radio" id="emissoes-5" name="emissoes" value="5">
+                <label for="emissoes-5">5 - Gestão avançada e certificada</label>
+              </div>
+            </div>
+          </div>
+          <div class="navigation">
+            <button class="btn btn-prev" type="button" onclick="prevStep()">Anterior</button>
+            <button class="btn btn-next" type="button" onclick="nextStep()">Próximo</button>
+          </div>
+        </fieldset>
+
+        <!-- PERGUNTA 6 -->
+        <fieldset>
+          <legend>6. Cadeia de Fornecimento</legend>
+          <div class="question">
+            <p>Como sua empresa avalia a sustentabilidade dos fornecedores?</p>
+            <div class="options">
+              <div class="option">
+                <input type="radio" id="fornecedores-0" name="fornecedores" value="0" required>
+                <label for="fornecedores-0">0 - Não avalia</label>
+              </div>
+              <div class="option">
+                <input type="radio" id="fornecedores-1" name="fornecedores" value="1">
+                <label for="fornecedores-1">1 - Avaliação informal</label>
+              </div>
+              <div class="option">
+                <input type="radio" id="fornecedores-2" name="fornecedores" value="2">
+                <label for="fornecedores-2">2 - Critérios básicos</label>
+              </div>
+              <div class="option">
+                <input type="radio" id="fornecedores-3" name="fornecedores" value="3">
+                <label for="fornecedores-3">3 - Sistema estruturado</label>
+              </div>
+              <div class="option">
+                <input type="radio" id="fornecedores-4" name="fornecedores" value="4">
+                <label for="fornecedores-4">4 - Auditoria regular</label>
+              </div>
+              <div class="option">
+                <input type="radio" id="fornecedores-5" name="fornecedores" value="5">
+                <label for="fornecedores-5">5 - Cadeia totalmente sustentável</label>
+              </div>
+            </div>
+          </div>
+          <div class="navigation">
+            <button class="btn btn-prev" type="button" onclick="prevStep()">Anterior</button>
+            <button class="btn btn-next" type="button" onclick="nextStep()">Próximo</button>
+          </div>
+        </fieldset>
+
+        <!-- PERGUNTA 7 -->
+        <fieldset>
+          <legend>7. Inovação e Tecnologia</legend>
+          <div class="question">
+            <p>A empresa investe em tecnologias sustentáveis?</p>
+            <div class="options">
+              <div class="option">
+                <input type="radio" id="inovacao-0" name="inovacao" value="0" required>
+                <label for="inovacao-0">0 - Não investe</label>
+              </div>
+              <div class="option">
+                <input type="radio" id="inovacao-1" name="inovacao" value="1">
+                <label for="inovacao-1">1 - Investimentos mínimos</label>
+              </div>
+              <div class="option">
+                <input type="radio" id="inovacao-2" name="inovacao" value="2">
+                <label for="inovacao-2">2 - Algumas iniciativas</label>
+              </div>
+              <div class="option">
+                <input type="radio" id="inovacao-3" name="inovacao" value="3">
+                <label for="inovacao-3">3 - Programa estruturado</label>
+              </div>
+              <div class="option">
+                <input type="radio" id="inovacao-4" name="inovacao" value="4">
+                <label for="inovacao-4">4 - Inovação contínua</label>
+              </div>
+              <div class="option">
+                <input type="radio" id="inovacao-5" name="inovacao" value="5">
+                <label for="inovacao-5">5 - Líder em tecnologia verde</label>
+              </div>
+            </div>
+          </div>
+          <div class="navigation">
+            <button class="btn btn-prev" type="button" onclick="prevStep()">Anterior</button>
+            <button class="btn btn-next" type="button" onclick="nextStep()">Próximo</button>
+          </div>
+        </fieldset>
+
+        <!-- PERGUNTA 8 -->
+        <fieldset>
+          <legend>8. Educação e Conscientização</legend>
+          <div class="question">
+            <p>Como a empresa promove a conscientização ambiental entre colaboradores?</p>
+            <div class="options">
+              <div class="option">
+                <input type="radio" id="educacao-0" name="educacao" value="0" required>
+                <label for="educacao-0">0 - Não promove</label>
+              </div>
+              <div class="option">
+                <input type="radio" id="educacao-1" name="educacao" value="1">
+                <label for="educacao-1">1 - Informações básicas</label>
+              </div>
+              <div class="option">
+                <input type="radio" id="educacao-2" name="educacao" value="2">
+                <label for="educacao-2">2 - Treinamentos eventuais</label>
+              </div>
+              <div class="option">
+                <input type="radio" id="educacao-3" name="educacao" value="3">
+                <label for="educacao-3">3 - Programa contínuo</label>
+              </div>
+              <div class="option">
+                <input type="radio" id="educacao-4" name="educacao" value="4">
+                <label for="educacao-4">4 - Cultura organizacional</label>
+              </div>
+              <div class="option">
+                <input type="radio" id="educacao-5" name="educacao" value="5">
+                <label for="educacao-5">5 - Liderança exemplar</label>
+              </div>
+            </div>
+          </div>
+          <div class="navigation">
+            <button class="btn btn-prev" type="button" onclick="prevStep()">Anterior</button>
+            <button class="btn btn-next" type="button" onclick="nextStep()">Próximo</button>
+          </div>
+        </fieldset>
+
+        <!-- PERGUNTA 9 -->
+        <fieldset>
+          <legend>9. Certificações e Reconhecimento</legend>
+          <div class="question">
+            <p>A empresa possui certificações ambientais?</p>
+            <div class="options">
+              <div class="option">
+                <input type="radio" id="certificacoes-0" name="certificacoes" value="0" required>
+                <label for="certificacoes-0">0 - Nenhuma certificação</label>
+              </div>
+              <div class="option">
+                <input type="radio" id="certificacoes-1" name="certificacoes" value="1">
+                <label for="certificacoes-1">1 - Em processo de obtenção</label>
+              </div>
+              <div class="option">
+                <input type="radio" id="certificacoes-2" name="certificacoes" value="2">
+                <label for="certificacoes-2">2 - 1-2 certificações básicas</label>
+              </div>
+              <div class="option">
+                <input type="radio" id="certificacoes-3" name="certificacoes" value="3">
+                <label for="certificacoes-3">3 - Certificações relevantes</label>
+              </div>
+              <div class="option">
+                <input type="radio" id="certificacoes-4" name="certificacoes" value="4">
+                <label for="certificacoes-4">4 - Múltiplas certificações</label>
+              </div>
+              <div class="option">
+                <input type="radio" id="certificacoes-5" name="certificacoes" value="5">
+                <label for="certificacoes-5">5 - Reconhecimento internacional</label>
+              </div>
+            </div>
+          </div>
+          <div class="navigation">
+            <button class="btn btn-prev" type="button" onclick="prevStep()">Anterior</button>
+            <button class="btn btn-next" type="button" onclick="nextStep()">Próximo</button>
+          </div>
+        </fieldset>
+
+        <!-- PERGUNTA 10 -->
+        <fieldset>
+          <legend>10. Transparência e Relatórios</legend>
+          <div class="question">
+            <p>A empresa publica relatórios de sustentabilidade?</p>
+            <div class="options">
+              <div class="option">
+                <input type="radio" id="relatorios-0" name="relatorios" value="0" required>
+                <label for="relatorios-0">0 - Não publica</label>
+              </div>
+              <div class="option">
+                <input type="radio" id="relatorios-1" name="relatorios" value="1">
+                <label for="relatorios-1">1 - Informações básicas no site</label>
+              </div>
+              <div class="option">
+                <input type="radio" id="relatorios-2" name="relatorios" value="2">
+                <label for="relatorios-2">2 - Relatório anual simples</label>
+              </div>
+              <div class="option">
+                <input type="radio" id="relatorios-3" name="relatorios" value="3">
+                <label for="relatorios-3">3 - Relatório detalhado</label>
+              </div>
+              <div class="option">
+                <input type="radio" id="relatorios-4" name="relatorios" value="4">
+                <label for="relatorios-4">4 - Padrões internacionais (GRI)</label>
+              </div>
+              <div class="option">
+                <input type="radio" id="relatorios-5" name="relatorios" value="5">
+                <label for="relatorios-5">5 - Liderança em transparência</label>
+              </div>
+            </div>
+          </div>
+          <div class="navigation">
+            <button class="btn btn-prev" type="button" onclick="prevStep()">Anterior</button>
+            <button class="btn btn-submit" type="button" onclick="calcularResultado()">Ver Resultado</button>
+          </div>
+        </fieldset>
+
+        </form>
+
+        <!-- RESULTADO -->
+        <div id="resultado">
+          <div class="score-circle" id="score-circle">0</div>
+          <h2 class="result-title" id="result-title">Seu Resultado</h2>
+          <p class="result-description" id="result-description"></p>
+          <div class="recommendations" id="recommendations"></div>
+          <button class="btn btn-restart" onclick="reiniciarQuestionario()">Fazer Novamente</button>
+          <button onclick="gerarPDF()" 
+        style="
+            margin-top: 20px; 
+            padding: 10px 20px; 
+            background: #00ffa7; 
+            border: none; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            font-size: 16px;">
+    📄 Baixar Diagnóstico em PDF
+</button>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer>
+    © 2025 EcoTrace — Tecnologia e Sustentabilidade
+  </footer>
+
+  <script src="../js/barra.js"></script>
+
+  <!-- SCRIPT DO MENU LATERAL + FIREBASE -->
+  <script type="module" src="../js/dia1.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+  <!-- Biblioteca para gerar PDF -->
+<script type="module">
+// ======================================================
+// 🔥 CARREGAR DIAGNÓSTICO DIRETAMENTE DO FIRESTORE
+// ======================================================
+async function carregarDiagnostico() {
+    const usuario = await verificarUsuarioLogado();
+    if (!usuario) return null;
+
+    const { 
+        getFirestore, collection, query, where, orderBy, limit, getDocs 
+    } = await import("https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js");
+
+    const db = getFirestore();
+
+    const q = query(
+        collection(db, "diagnosticos"),
+        where("usuarioId", "==", usuario.uid),
+        orderBy("data", "desc"),
+        limit(1)
+    );
+
+    const snap = await getDocs(q);
+
+    if (snap.empty) {
+        alert("Nenhum diagnóstico encontrado.");
+        return null;
+    }
+
+    const diag = snap.docs[0].data();
+    console.log("🔥 Diagnóstico carregado:", diag);
+    return diag;
+}
+
+// ======================================================
+// 🔥 GERAR PDF DO DIAGNÓSTICO (AGORA SEM CACHE ANTIGO)
+// ======================================================
+async function gerarPDF() {
+    console.log("📄 Função gerarPDF() chamada!");
+
+    // Sempre buscar o diagnóstico mais recente
+    const diag = await carregarDiagnostico(); 
+    if (!diag) {
+        alert("Erro: nenhum diagnóstico encontrado.");
+        return;
+    }
+
+    // Dados do usuário
+    const usuario = await verificarUsuarioLogado();
+    const { getFirestore, doc, getDoc } = await import("https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js");
+    const db = getFirestore();
+
+    const userRef = doc(db, "usuarios", usuario.uid);
+    const userSnap = await getDoc(userRef);
+
+    const nome = userSnap.exists() ? userSnap.data().nome : usuario.displayName || "Usuário";
+    const empresa = userSnap.exists() ? userSnap.data().empresa : usuario.email;
+
+   // ======================================================
+// 📄 CRIAÇÃO DO CONTEÚDO PARA O PDF
+// ======================================================
+const div = document.createElement("div");
+div.style.padding = "25px";
+div.style.fontFamily = "Arial, sans-serif";
+div.style.lineHeight = "1.4";
+div.style.fontSize = "13.5px";
+div.style.maxWidth = "800px";
+div.style.margin = "0 auto";
+
+div.innerHTML = `
+    <h1 style="
+        color:#009f6b;
+        text-align:center;
+        margin-bottom: 5px;
+    ">
+        Relatório EcoTrace
+    </h1>
+    <hr style="border:0; border-bottom:1px solid #ccc; margin: 10px 0 20px 0;">
+
+    <div style="margin-bottom:20px;">
+        <p><strong>Nome:</strong> ${nome}</p>
+        <p><strong>Empresa:</strong> ${empresa}</p>
+        <p><strong>Data:</strong> ${new Date(diag.data.seconds * 1000).toLocaleString("pt-BR")}</p>
+    </div>
+
+    <h2 style="color:#009f6b; margin-bottom:5px;">Pontuação Geral</h2>
+    <p style="font-size:15px;"><strong>${diag.pontuacao}% – ${diag.categoria}</strong></p>
+
+    <h2 style="color:#009f6b; margin-top:20px;">Descrição do Resultado</h2>
+    <p>${gerarDescricao(diag.pontuacao)}</p>
+
+    <h2 style="color:#009f6b; margin-top:20px;">Recomendações</h2>
+    <ul style="margin-left:15px;">
+        ${gerarRecs(diag.pontuacao)
+            .map(r => `<li style="margin-bottom:5px;">${r}</li>`)
+            .join("")}
+    </ul>
+
+    <h2 style="color:#009f6b; margin-top:20px;">Respostas do Questionário</h2>
+    <pre style="
+        background:#f5f5f5;
+        padding:10px;
+        border-radius:6px;
+        white-space:pre-wrap;
+        word-break:break-word;
+        font-size:12px;
+    ">
+${JSON.stringify(diag.respostas, null, 2)}
+    </pre>
+`;
+
+// Adiciona ao HTML (necessário para html2pdf)
+document.body.appendChild(div);
+
+// ======================================================
+// 🖨️ CONFIGURAÇÕES DO PDF
+// ======================================================
+const opt = {
+    margin:       10,
+    filename:     `EcoTrace-Diagnostico.pdf`,
+    image:        { type: "jpeg", quality: 0.98 },
+    html2canvas:  { scale: 2 },
+    jsPDF:        { unit: "mm", format: "a4", orientation: "portrait" }
+};
+
+// Gera o PDF
+await html2pdf().set(opt).from(div).save();
+
+// Remove o conteúdo após gerar
+div.remove();
+}
+
+// ======================================================
+// 📌 DESCRIÇÃO
+// ======================================================
+function gerarDescricao(score) {
+    if (score >= 90) return "Sua empresa demonstra excelência em práticas sustentáveis.";
+    if (score >= 75) return "Sua empresa apresenta forte responsabilidade ambiental.";
+    if (score >= 60) return "Sua empresa está evoluindo na jornada sustentável.";
+    if (score >= 40) return "Sua empresa iniciou a jornada, mas precisa de melhorias.";
+    return "A empresa precisa de atenção imediata em sustentabilidade.";
+}
+
+// ======================================================
+// 📌 RECOMENDAÇÕES
+// ======================================================
+function gerarRecs(score) {
+    if (score >= 90) return ["Participe de fóruns internacionais", "Busque certificações avançadas", "Mentore outras empresas"];
+    if (score >= 75) return ["Defina metas carbono zero", "Amplie certificações", "Parcerias com ONGs"];
+    if (score >= 60) return ["Crie comitê ESG", "Defina metas mensuráveis", "Treinamento interno"];
+    if (score >= 40) return ["Auditorias ambientais", "Plano de ação inicial", "Projetos sustentáveis simples"];
+    return ["Consultoria urgente", "Políticas ambientais básicas", "Treinamento de emergência"];
+}
+
+// ======================================================
+// 🔥 Torna a função global para o botão funcionar
+// ======================================================
+window.gerarPDF = gerarPDF;
+</script>
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+
+    // ==== SUA CONFIG DO FIREBASE ====
+    const firebaseConfig = {
+        apiKey: "AIzaSyAe7mU1MyCwrBmJlm89cKM-WHONzeqyU3w",
+        authDomain: "projeto-ecotrace.firebaseapp.com",
+        projectId: "projeto-ecotrace",
+        storageBucket: "projeto-ecotrace.firebasestorage.app",
+        messagingSenderId: "528782336744",
+        appId: "1:528782336744:web:1f4b1fa4807543ff225f5d",
+        measurementId: "G-RTWLGJD188"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const sideMenu = document.getElementById("side-menu");
+    const overlay = document.getElementById("menu-overlay");
+    const perfilBtn = document.getElementById("perfil");
+    const closeBtn = document.getElementById("close-menu");
+
+    const logadoDiv = document.getElementById("menu-logado");
+    const deslogadoDiv = document.getElementById("menu-deslogado");
+    const logoutBtn = document.getElementById("logout-btn");
+    const adminBtn = document.getElementById("admin-btn");
+    const nomeUsuarioH3 = document.getElementById("nome-usuario");
+
+    let notificou = false;
+
+    function mostrarNotificacao(texto) {
+        const notif = document.createElement("div");
+        notif.classList.add("notificacao");
+        notif.textContent = texto;
+        document.body.appendChild(notif);
+        setTimeout(() => notif.classList.add("show"), 100);
+        setTimeout(() => {
+            notif.classList.remove("show");
+            setTimeout(() => notif.remove(), 500);
+        }, 3500);
+    }
+
+    onAuthStateChanged(auth, async (user) => {
+        if (user) {
+            logadoDiv.style.display = "flex";
+            deslogadoDiv.style.display = "none";
+
+            const nome = user.displayName || user.email.split("@")[0];
+            nomeUsuarioH3.textContent = nome;
+
+            // 🔹 Verifica se o usuário é admin
+            const userDoc = await getDoc(doc(db, "usuarios", user.uid));
+            const role = userDoc.exists() ? userDoc.data().role : "user";
+
+            if (role === "admin" && adminBtn) {
+                adminBtn.style.display = "block";
+                adminBtn.onclick = () => window.location.href = "dashboard.html";
+            } else if (adminBtn) {
+                adminBtn.style.display = "none";
+            }
+
+            if (!notificou) {
+                mostrarNotificacao(`Bem-vindo de volta, ${nome}!`);
+                notificou = true;
+            }
+
+        } else {
+            logadoDiv.style.display = "none";
+            deslogadoDiv.style.display = "flex";
+            nomeUsuarioH3.textContent = "Visitante";
+            if (adminBtn) adminBtn.style.display = "none";
+        }
+    });
+
+    // 🔥 Logout
+    if (logoutBtn) {
+        logoutBtn.addEventListener("click", () => {
+            signOut(auth).then(() => {
+                window.location.href = "index.html";
+            });
+        });
+    }
+
+    // ===== Abertura/fechamento do menu =====
+    perfilBtn.addEventListener("click", () => {
+        sideMenu.classList.add("open");
+        overlay.classList.add("active");
+    });
+
+    closeBtn.addEventListener("click", () => {
+        sideMenu.classList.remove("open");
+        overlay.classList.remove("active");
+    });
+
+    overlay.addEventListener("click", () => {
+        sideMenu.classList.remove("open");
+        overlay.classList.remove("active");
+    });
+
+  </script>
+
+</body>
+</html>
