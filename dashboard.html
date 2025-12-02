@@ -1,97 +1,123 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dashboard Admin - EcoTrace</title>
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+
+<!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- CSS Mega Blaster -->
 <link rel="stylesheet" href="/css/dash.css">
 </head>
 <body>
 
-<!-- Sidebar -->
-<div class="sidebar">
-<img class="logo" src="../imagens/cin.png" alt="EcoTrace">
-<button id="dashboard-home" title="Início">🏠</button>
-<button id="users-btn" title="Usuários">👥</button>
-<button id="reports-btn" title="Relatórios">📊</button>
-<button id="settings-btn" title="Configurações">⚙️</button>
-<button id="logout-btn" title="Sair">⏏️</button>
-</div>
-
-<!-- Conteúdo principal -->
-<div class="main-content">
-<h1>Bem-vindo, <span id="nome-usuario">Admin</span>!</h1>
-
-<!-- HOME CARD -->
-<div id="home-card" class="card active">
-  <h2>Visão Geral do Sistema</h2>
-  <div class="kpis">
-    <div class="kpi">
-      <h3>Total de Diagnósticos</h3>
-      <span id="kpi-total">0</span>
-    </div>
-    <div class="kpi">
-      <h3>Média Geral</h3>
-      <span id="kpi-media">0%</span>
-    </div>
-    <div class="kpi">
-      <h3>Categoria mais comum</h3>
-      <span id="kpi-categoria">–</span>
-    </div>
+<!-- MENU LATERAL FIXO -->
+<aside class="sidebar">
+  <div class="logo-container">  
+    <img id="logo" src="/imagens/image-removebg-preview (1).png" alt="ecotrace" class="logo">  
   </div>
-  <div class="charts-box">
-    <div>
-      <h3>Distribuição por Categoria</h3>
-      <canvas id="chart-categorias"></canvas>
+  <nav class="menu">
+    <p>________</p>
+
+ 
+
+
+    <button id="dashboard-home" class="menu-btn"><img class="icone" src="/imagens/graficos.png" alt="graph"></button>
+    <button id="users-btn" class="menu-btn"><img class="icone" src="/imagens/perfilz.png" alt="login"></button>
+    <button id="reports-btn" class="menu-btn"><img class="icone" src="/imagens/docs.png" alt="docs"></button>
+     <p>________</p>
+    <div id="ext">
+    <a id="login" href="forms.html">
+        <img class="icone" src="/imagens/log.png" alt="login">
+      </a>
+      
+      <a id="downloads" href="downloads.html">
+        <img class="icone" src="/imagens/down.png" alt="downloads">
+      </a>
+      <button id="logout-btn" class="menu-btn logout"><img class="icone-log" src="/imagens/logout.png" alt="docs"></button>
+      </div>
+    </nav>
+  
+</aside>
+
+<!-- CONTEÚDO PRINCIPAL -->
+<main class="main-content">
+  <header>
+    <h1>Bem-vindo, <span id="nome-usuario">Admin</span>!</h1>
+    
+  </header>
+
+  <!-- HOME CARD -->
+  <section id="home-card" class="card active">
+    <h2>Visão Geral do Sistema</h2>
+    <div class="kpis">
+      <div class="kpi">
+        <h3>Total de Diagnósticos</h3>
+        <span id="kpi-total">0</span>
+      </div>
+      <div class="kpi">
+        <h3>Média Geral</h3>
+        <span id="kpi-media">0%</span>
+      </div>
+      <div class="kpi">
+        <h3>Categoria mais comum</h3>
+        <span id="kpi-categoria">–</span>
+      </div>
     </div>
-    <div>
-      <h3>Média de Pontuação por Categoria</h3>
-      <canvas id="chart-medias"></canvas>
+
+    <div class="charts-box">
+      <div class="chart-container">
+        <h3>Distribuição por Categoria</h3>
+        <canvas id="chart-categorias"></canvas>
+      </div>
+      <div class="chart-container">
+        <h3>Média de Pontuação por Categoria</h3>
+        <canvas id="chart-medias"></canvas>
+      </div>
+      <div class="chart-container">
+        <h3>Nível Geral de Sustentabilidade (%)</h3>
+        <canvas id="chart-radial"></canvas>
+      </div>
     </div>
-    <div>
-      <h3>Nível Geral de Sustentabilidade (%)</h3>
-      <canvas id="chart-radial"></canvas>
+  </section>
+
+  <!-- USERS CARD -->
+  <section id="users-card" class="card">
+    <h2>Gerenciar Usuários</h2>
+    <table id="users-table">
+      <thead>
+        <tr><th>Nome</th><th>Email</th><th>Permissão</th><th>Ações</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </section>
+
+  <!-- REPORTS CARD -->
+  <section id="reports-card" class="card">
+    <h2>Relatórios Recentes</h2>
+    <div class="reports-actions">
+      <button id="btn-export-pdf" class="btn-fancy">Exportar PDF</button>
     </div>
-  </div>
-</div>
+    <table id="reports-table">
+      <thead>
+        <tr><th>Empresa</th><th>Data</th><th>Pontuação</th><th>Categoria</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </section>
+</main>
 
-<!-- USERS CARD -->
-<div id="users-card" class="card">
-<h2>Gerenciar Usuários</h2>
-<table id="users-table">
-<thead>
-<tr><th>Nome</th><th>Email</th><th>Permissão</th><th>Ações</th></tr>
-</thead>
-<tbody></tbody>
-</table>
-</div>
+<!-- Notificação -->
+<div class="notificacao" id="notificacao"></div>
 
-<!-- REPORTS CARD -->
-<div id="reports-card" class="card">
-<h2>Relatórios Recentes</h2>
-<div class="reports-actions" style="margin-bottom:15px;">
-  <button id="btn-export-pdf">Exportar PDF</button>
-</div>
-<table id="reports-table">
-  <thead>
-    <tr><th>Empresa</th><th>Data</th><th>Pontuação</th><th>Categoria</th></tr>
-  </thead>
-  <tbody></tbody>
-</table>
-</div>
-
-<!-- SETTINGS CARD -->
-<div id="settings-card" class="card">
-<h2>Configurações Rápidas</h2>
-<div class="settings-item" style="margin-bottom:15px;">
-  <label for="itens-por-pagina">Itens por página (Relatórios):</label>
-  <input type="number" id="itens-por-pagina" value="10" min="5" max="50">
-</div>
-<button id="btn-salvar-config">Salvar Configurações</button>
-</div>
-
+<!-- JS -->
 <script type="module">
+// ---------------- FIREBASE ----------------
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
 import { getFirestore, collection, getDocs, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
@@ -110,18 +136,16 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
+// ---------------- ELEMENTOS ----------------
 const nomeUsuarioSpan = document.getElementById("nome-usuario");
 const logoutBtn = document.getElementById("logout-btn");
 let notificou = false;
 
-// Notificação
-function mostrarNotificacao(texto) {
-  const notif = document.createElement("div");
-  notif.classList.add("notificacao");
+function mostrarNotificacao(texto){
+  const notif = document.getElementById("notificacao");
   notif.textContent = texto;
-  document.body.appendChild(notif);
-  setTimeout(() => notif.classList.add("show"), 100);
-  setTimeout(() => { notif.classList.remove("show"); setTimeout(() => notif.remove(), 500); }, 3500);
+  notif.classList.add("show");
+  setTimeout(()=>notif.classList.remove("show"), 3000);
 }
 
 // Troca de cards
@@ -129,7 +153,6 @@ const buttons = [
   {btn:'dashboard-home', card:'home-card'},
   {btn:'users-btn', card:'users-card'},
   {btn:'reports-btn', card:'reports-card'},
-  {btn:'settings-btn', card:'settings-card'}
 ];
 buttons.forEach(item=>{
   const btn=document.getElementById(item.btn);
@@ -141,10 +164,10 @@ buttons.forEach(item=>{
 });
 
 // Logout
-logoutBtn.addEventListener("click", ()=> signOut(auth).then(()=> window.location.href="index.html"));
+logoutBtn.addEventListener("click", ()=> window.location.href="index.html");
 
 // Carregar dados
-onAuthStateChanged(auth, async (user) => {
+onAuthStateChanged(auth, async (user)=>{
   if(user){
     nomeUsuarioSpan.textContent = user.displayName || user.email.split("@")[0];
     if(!notificou){ mostrarNotificacao(`Bem-vindo de volta, ${nomeUsuarioSpan.textContent}!`); notificou=true; }
@@ -154,14 +177,14 @@ onAuthStateChanged(auth, async (user) => {
   } else { window.location.href="index.html"; }
 });
 
-// Função para carregar usuários
+// ---------------- FUNÇÕES ----------------
 async function carregarUsuarios(){
   const tbody = document.querySelector("#users-table tbody");
   tbody.innerHTML="";
-  const querySnapshot = await getDocs(collection(db,"usuarios"));
-  querySnapshot.forEach((docSnap)=>{
-    const data=docSnap.data();
-    const tr=document.createElement("tr");
+  const snapshot = await getDocs(collection(db,"usuarios"));
+  snapshot.forEach(docSnap=>{
+    const data = docSnap.data();
+    const tr = document.createElement("tr");
     tr.innerHTML=`
       <td>${data.nome||'Sem nome'}</td>
       <td>${data.email}</td>
@@ -173,14 +196,14 @@ async function carregarUsuarios(){
     `;
     tr.querySelector(".admin-btn").addEventListener("click", async ()=>{
       const novoRole = data.role==='admin'?'user':'admin';
-      await updateDoc(doc(db,"usuarios",docSnap.id), {role: novoRole});
+      await updateDoc(doc(db,"usuarios",docSnap.id),{role:novoRole});
       mostrarNotificacao(`Usuário ${data.email} agora é ${novoRole}`);
       carregarUsuarios();
     });
     tr.querySelector(".delete-btn").addEventListener("click", async ()=>{
       if(confirm(`Deseja realmente excluir ${data.email}?`)){
         await deleteDoc(doc(db,"usuarios",docSnap.id));
-        mostrarNotificacao(`Usuário ${data.email} excluído do banco de dados.`);
+        mostrarNotificacao(`Usuário ${data.email} excluído`);
         carregarUsuarios();
       }
     });
@@ -188,108 +211,65 @@ async function carregarUsuarios(){
   });
 }
 
-// Função para carregar diagnósticos e gráficos
 async function carregarDiagnosticos(){
   const snapshot = await getDocs(collection(db,"diagnosticos"));
-  const scoresPorCategoria = {
-    "Líder em Sustentabilidade": [],
-    "Avançado em Sustentabilidade": [],
-    "Em Transição Sustentável": [],
-    "Iniciante": [],
-    "Atenção Imediata": []
-  };
-  const total = snapshot.size;
-  let somaGeral = 0;
+  const categorias = ["Líder","Avançado","Transição","Iniciante","Atenção"];
+  const scoresPorCategoria = { "Líder":[], "Avançado":[], "Transição":[], "Iniciante":[], "Atenção":[] };
+  let total=0, soma=0;
 
   snapshot.forEach(docSnap=>{
-    const data = docSnap.data();
-    const score = data.pontuacao;
-    somaGeral += score;
-    if(score >= 90) scoresPorCategoria["Líder em Sustentabilidade"].push(score);
-    else if(score >= 75) scoresPorCategoria["Avançado em Sustentabilidade"].push(score);
-    else if(score >= 60) scoresPorCategoria["Em Transição Sustentável"].push(score);
-    else if(score >= 40) scoresPorCategoria["Iniciante"].push(score);
-    else scoresPorCategoria["Atenção Imediata"].push(score);
+    const data=docSnap.data();
+    const score = data.pontuacao || 0;
+    soma += score; total++;
+    if(score>=90) scoresPorCategoria["Líder"].push(score);
+    else if(score>=75) scoresPorCategoria["Avançado"].push(score);
+    else if(score>=60) scoresPorCategoria["Transição"].push(score);
+    else if(score>=40) scoresPorCategoria["Iniciante"].push(score);
+    else scoresPorCategoria["Atenção"].push(score);
   });
 
   document.getElementById("kpi-total").textContent = total;
-  document.getElementById("kpi-media").textContent = (somaGeral/total).toFixed(1) + "%";
-  const categoriaMaisComum = Object.entries(scoresPorCategoria).sort((a,b)=>b[1].length - a[1].length)[0][0];
+  document.getElementById("kpi-media").textContent = (soma/total).toFixed(1) + "%";
+  const categoriaMaisComum = Object.entries(scoresPorCategoria).sort((a,b)=>b[1].length-a[1].length)[0][0];
   document.getElementById("kpi-categoria").textContent = categoriaMaisComum;
 
   new Chart(document.getElementById("chart-categorias"), {
     type:"pie",
-    data:{
-      labels: Object.keys(scoresPorCategoria),
-      datasets:[{ data: Object.values(scoresPorCategoria).map(x=>x.length), backgroundColor:["#4caf50","#2196f3","#ff9800","#f44336","#9c27b0"] }]
-    }
+    data:{ labels:Object.keys(scoresPorCategoria), datasets:[{ data:Object.values(scoresPorCategoria).map(a=>a.length), backgroundColor:["#4caf50","#2196f3","#ff9800","#f44336","#9c27b0"] }] }
   });
 
   new Chart(document.getElementById("chart-medias"), {
-    type:"bar",
-    data:{
-      labels: Object.keys(scoresPorCategoria),
-      datasets:[{ data: Object.values(scoresPorCategoria).map(x=>x.length? (x.reduce((a,b)=>a+b)/x.length).toFixed(1):0), backgroundColor:"#009f6b" }]
-    },
+    type:"line",
+    data:{ labels:Object.keys(scoresPorCategoria), datasets:[{ data:Object.values(scoresPorCategoria).map(a=>a.length? (a.reduce((x,y)=>x+y)/a.length).toFixed(1):0), backgroundColor:"#009f6b" }] },
     options:{ scales:{ y:{ beginAtZero:true, max:100 } } }
   });
 
   new Chart(document.getElementById("chart-radial"), {
     type:"doughnut",
-    data:{ labels:["Nível Global"], datasets:[{ data:[somaGeral/total, 100-somaGeral/total], backgroundColor:["#009f6b","#ddd"] }] }
+    data:{ labels:["Nível Global"], datasets:[{ data:[soma/total,100-soma/total], backgroundColor:["#009f6b","#ddd"] }] }
   });
 }
 
-// Função auxiliar para calcular categoria
-function calcularCategoria(score){
-  if(score >= 90) return "Líder em Sustentabilidade";
-  else if(score >= 75) return "Avançado em Sustentabilidade";
-  else if(score >= 60) return "Em Transição Sustentável";
-  else if(score >= 40) return "Iniciante";
-  else return "Atenção Imediata";
-}
-
-// Função para carregar relatórios
 async function carregarRelatorios(){
   const tbody = document.querySelector("#reports-table tbody");
-  tbody.innerHTML = "";
+  tbody.innerHTML="";
   const snapshot = await getDocs(collection(db,"diagnosticos"));
-  const docsOrdenados = snapshot.docs.sort((a,b)=>{
-    return b.data().data?.seconds - a.data().data?.seconds;
-  });
-  docsOrdenados.forEach(docSnap=>{
-    const data = docSnap.data();
+  snapshot.docs.sort((a,b)=>b.data().data?.seconds-a.data().data?.seconds).forEach(docSnap=>{
+    const data=docSnap.data();
     const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td>${data.empresa || '-'}</td>
-      <td>${data.data ? new Date(data.data.seconds*1000).toLocaleDateString() : '-'}</td>
+    tr.innerHTML=`
+      <td>${data.empresa||'-'}</td>
+      <td>${data.data? new Date(data.data.seconds*1000).toLocaleDateString():'-'}</td>
       <td>${data.pontuacao}%</td>
-      <td>${calcularCategoria(data.pontuacao)}</td>
+      <td>${data.pontuacao>=90?"Líder":data.pontuacao>=75?"Avançado":data.pontuacao>=60?"Transição":data.pontuacao>=40?"Iniciante":"Atenção"}</td>
     `;
     tbody.appendChild(tr);
   });
-
-  document.getElementById("btn-export-pdf").addEventListener("click", ()=>{
-    alert("Função de exportar PDF implementável com jsPDF ou html2pdf.");
-  });
-}
-
-// Configurações
-const temaSelect = document.getElementById("tema");
-if(temaSelect){
-  temaSelect.addEventListener("change", ()=>{
-    if(temaSelect.value === "escuro"){
-      document.body.style.background = "#1c1c1c";
-      document.body.style.color = "#f0f0f0";
-    } else {
-      document.body.style.background = "linear-gradient(135deg, #e0f7fa, #f0f2f5)";
-      document.body.style.color = "#333";
-    }
-  });
+  document.getElementById("btn-export-pdf").addEventListener("click", ()=> alert("Função de exportar PDF implementável."));
 }
 
 document.getElementById("btn-salvar-config").addEventListener("click", ()=>{
-  const itens = parseInt(document.getElementById("itens-por-pagina").value);
+  const itens=parseInt(document.getElementById("itens-por-pagina").value);
   mostrarNotificacao(`Configurações salvas: ${itens} itens por página`);
 });
 </script>

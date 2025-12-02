@@ -1,0 +1,443 @@
+/* ==========================================================
+   BASE & FONTES
+========================================================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Mont", sans-serif;
+}
+
+:root {
+    --verde-principal: #2E8B57;
+    --verde-escuro: #1F6B45;
+    --verde-claro: #4CAF87;
+    --branco: #FFFFFF;
+    --cinza-claro: #F5F5F5;
+    --cinza-medio: #E0E0E0;
+    --cinza-escuro: #c7d8f2;
+    --preto: #000000;
+    --vermelho: #cb1515;
+    --vermelho-hover: #ee4444;
+
+    --shadow-soft: 0 8px 25px rgba(0,0,0,0.15);
+    --shadow-hard: 0 15px 40px rgba(0,0,0,0.25);
+    --glow: 0 0 20px rgba(46, 139, 87, 0.3);
+    --glow-strong: 0 0 30px rgba(46, 139, 87, 0.5);
+    --radius: 12px;
+    --transition: all 0.3s ease-in-out;
+}
+
+body {
+    background-color: #03241E;
+    color: var(--cinza-claro);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: row;
+}
+
+/* ==========================================================
+   SIDEBAR OVAl - REFACTOR
+========================================================== */
+
+.menu p{
+    color:#23db51;
+}
+
+.sidebar { 
+    position: fixed;
+     top: 30px;
+      left: 15px;
+       width: 100px;
+        height: calc(100% - 60px);
+         background-color: rgba(54, 66, 89, 0.95);
+          display: flex;
+           flex-direction: column;
+            align-items: center;
+             padding: 25px 15px;
+              gap: 20px;
+               box-shadow: var(--shadow-hard);
+                border-radius: 50px;
+                 transition: var(--transition);
+                  z-index: 1000; }
+
+/* Logo */
+.sidebar img.logo {
+    width: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 20px;
+    border: none;
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.sidebar img.logo:hover {
+    transform: scale(1.1);
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+}
+
+/* Ícones comuns */
+.icone, .icone-log {
+    width: 30px;
+    margin: 0;
+    transition: transform 0.3s ease, filter 0.3s ease;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+    cursor: pointer;
+}
+
+.icone-log {
+    width: 50px;
+}
+
+.icone:hover, .icone-log:hover {
+    transform: scale(1.2) rotate(5deg);
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+}
+
+/* Botões da sidebar */
+.sidebar button {
+    width: 100%;
+    padding: 12px 0;
+    background: transparent;
+    color: var(--branco);
+    border: none;
+    border-radius: 30px;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: center; /* centraliza o conteúdo */
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.sidebar button:hover {
+    background-color: rgba(255,255,255,0.15);
+    transform: translateY(-2px);
+}
+
+/* ================= SIDEBAR NAV VERTICAL ================= */
+.sidebar nav.menu {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* centraliza verticalmente os itens */
+    align-items: center;     /* centraliza horizontalmente os itens */
+    gap: 20px;
+    width: 100%;
+}
+
+/* Links e botões dentro da nav */
+.sidebar nav.menu a,
+.sidebar nav.menu button {
+    width: 90%;  /* largura uniforme */
+    display: flex;
+    align-items: center;
+    justify-content: center; /* centraliza ícone e texto */
+    padding: 10px 0;
+    text-decoration: none;
+    color: var(--branco);
+    border-radius: 30px;
+    transition: all 0.3s ease;
+}
+
+.sidebar nav.menu a:hover,
+.sidebar nav.menu button:hover {
+    background-color: rgba(255,255,255,0.15);
+}
+
+/* Ícones dentro da nav */
+.sidebar nav.menu .icone {
+    margin: 0; /* remove margem extra */
+}
+
+/* Logout específico */
+.sidebar button#logout-btn {
+    margin-top: 20px;
+    background-color: var(--vermelho);
+    width: 80%;
+}
+
+.sidebar button#logout-btn:hover {
+    background-color: var(--vermelho-hover);
+}
+
+/* RESPONSIVIDADE */
+@media(max-width: 768px){
+    .sidebar {
+        position: relative;
+        top: 0;
+        left: 0;
+        transform: none;
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-around;
+        padding: 10px 0;
+        border-radius: 0;
+        height: auto;
+    }
+
+    .sidebar img.logo { display: none; }
+    .sidebar nav.menu {
+        flex-direction: row;
+        justify-content: space-around;
+        width: 100%;
+    }
+
+    .sidebar nav.menu a,
+    .sidebar nav.menu button {
+        width: auto;
+        padding: 8px;
+    }
+
+    .icone, .icone-log { width: 25px; }
+}
+
+
+/* ==========================================================
+   MAIN CONTENT
+========================================================== */
+.main-content {
+    margin-left: 230px;
+    padding: 25px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+/* ==========================================================
+   HEADERS
+========================================================== */
+.main-content h1 {
+    color: var(--verde-claro);
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    margin-bottom: 20px;
+}
+
+/* ==========================================================
+   CARDS
+========================================================== */
+.card {
+    display: none;
+    background-color: rgba(255,255,255,0.05);
+    padding: 25px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-soft);
+    transition: var(--transition);
+}
+
+.card.active {
+    display: block;
+    animation: fadeInUp 0.5s ease forwards;
+}
+
+@keyframes fadeInUp {
+  from {opacity:0; transform: translateY(20px);}
+  to {opacity:1; transform: translateY(0);}
+}
+
+/* ==========================================================
+   KPIs
+========================================================== */
+.kpis {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.kpi {
+    flex: 1;
+    min-width: 150px;
+    background: var(--verde-escuro);
+    padding: 20px;
+    border-radius: var(--radius);
+    text-align: center;
+    color: var(--branco);
+    box-shadow: var(--shadow-soft);
+    transition: var(--transition);
+}
+
+.kpi h3 {
+    font-size: 1rem;
+    margin-bottom: 10px;
+}
+
+.kpi span {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+/* ==========================================================
+   CHARTS BOX - GRID MODERNO
+========================================================== */
+.charts-box {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+    padding: 10px 0;
+    width: 100%;
+}
+
+/* chart-container atualizado */
+.chart-container {
+    background-color: rgba(255, 255, 255, 0.07);
+    padding: 20px 20px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-soft);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    transition: var(--transition);
+    overflow: hidden;
+}
+
+.chart-container h3 {
+    color: var(--verde-claro);
+    font-size: 1.2rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+.chart-container canvas {
+    width: 100% !important;
+    height: 100% !important;
+    transition: all 0.3s ease;
+}
+
+.chart-container:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-hard);
+}
+
+/* Responsividade mais fluida */
+@media(max-width: 1024px){
+    .chart-container canvas { height: 250px !important; }
+}
+
+@media(max-width: 480px){
+    .chart-container canvas { height: 200px !important; }
+    .chart-container h3 { font-size: 1rem; }
+}
+
+
+
+/* ==========================================================
+   TABLES
+========================================================== */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: var(--radius);
+    overflow: hidden;
+}
+
+thead {
+    background-color: var(--verde-escuro);
+    color: var(--branco);
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+}
+
+tr:nth-child(even) {
+    background-color: rgba(255,255,255,0.05);
+}
+
+.action-btn {
+    padding: 5px 10px;
+    border-radius: var(--radius);
+    border: none;
+    cursor: pointer;
+    color: var(--branco);
+    transition: var(--transition);
+}
+
+.admin-btn {
+    background-color: var(--verde-claro);
+}
+
+.admin-btn:hover {
+    background-color: var(--verde-escuro);
+}
+
+.delete-btn {
+    background-color: var(--vermelho);
+}
+
+.delete-btn:hover {
+    background-color: var(--vermelho-hover);
+}
+
+/* ==========================================================
+   BUTTONS
+========================================================== */
+.btn-fancy {
+    padding: 12px 25px;
+    background: linear-gradient(135deg, var(--verde-escuro) 0%, var(--verde-principal) 100%);
+    color: var(--branco);
+    font-weight: bold;
+    border-radius: var(--radius);
+    border: none;
+    cursor: pointer;
+    box-shadow: var(--glow), var(--shadow-soft);
+    transition: var(--transition);
+}
+
+.btn-fancy:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--glow-strong), var(--shadow-hard);
+}
+
+/* ==========================================================
+   NOTIFICAÇÕES
+========================================================== */
+.notificacao {
+    position: fixed;
+    top: 75px;
+    right: -300px;
+    background-color: var(--verde-claro);
+    color: var(--branco);
+    padding: 15px 20px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-hard);
+    transition: right 0.5s ease, opacity 0.5s ease;
+    opacity: 0;
+    z-index: 3000;
+}
+
+.notificacao.show {
+    right: 10px;
+    opacity: 1;
+}
+
+/* ==========================================================
+   RESPONSIVIDADE
+========================================================== */
+@media(max-width: 1024px){
+    .sidebar { width: 200px; }
+    .main-content { margin-left: 200px; padding: 15px; }
+    .charts-box { flex-direction: column; }
+}
+
+@media(max-width: 768px){
+    .sidebar {
+        position: relative;
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-around;
+        padding: 10px 0;
+        border-radius: 0;
+        height: auto;
+    }
+
+    .sidebar img.logo { display: none; }
+    .main-content { margin-left: 0; padding: 15px; }
+    .kpis { flex-direction: column; }
+}
+
+@media(max-width: 480px){
+    h1 { font-size: 1.5rem; }
+    .kpi span { font-size: 1.2rem; }
+    .btn-fancy { padding: 8px 12px; font-size: 0.9rem; }
+}
