@@ -8,9 +8,17 @@
   
   <link rel="icon" type="image/png" href="/imagens/image-removebg-preview (1).png">
   <link rel="stylesheet" href="/css/download.css">
+
+  <!-- jsPDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <!-- jsPDF AutoTable -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+
 </head>
 
 <body>
+
   <!-- Overlay -->
   <div id="menu-overlay"></div>
 
@@ -27,7 +35,7 @@
       <a href="login_cadastro.html">Fazer Login</a>
     </div>
 
-    <button id="close-menu">E </button>
+    <button id="close-menu">E</button>
   </div>
 
   <!-- HEADER -->
@@ -59,7 +67,8 @@
 
   <!-- DOWNLOADS -->
   <div class="downloads-container">
-    <!-- Card Desktop -->
+
+    <!-- Card Plano -->
     <div class="download-card">
       <div class="download-icon">
         <svg viewBox="0 0 24 24">
@@ -67,10 +76,10 @@
         </svg>
       </div>
       <h3>Seu Plano</h3>
-      <p>Versão completa para Windows com todas as funcionalidades de análise e relatórios de sustentabilidade.</p>
-      <a href="downloads/EcoTrace_Setup_2.1.4.exe" class="download-btn pulse-animation">
+      <p>Baixe aqui o seu plano de Sustentabilidade Industrial, resultado do formulário de Diagnóstico EcoTrace.</p>
+      <button id="baixar-plano" class="download-btn pulse-animation">
         BAIXE SEU PDF AQUI!
-      </a>
+      </button>
     </div>
 
     <!-- Card Mobile -->
@@ -81,9 +90,9 @@
         </svg>
       </div>
       <h3>Game</h3>
-      <p>Aplicativo para Android e iOS com funcionalidades de escaneamento e acompanhamento em tempo real.</p>
-      <a href="downloads/EcoTrace_Mobile_1.5.2.zip" class="download-btn pulse-animation">
-        DOWNLOAD AQUI!
+      <p>Forma Lúdica e Interativa de ensinar e conduzir aprendizado relacionado a Sustentabilidade Industrial.</p>
+      <a href="https://zapleee.itch.io/energy-manager" class="download-btn pulse-animation">
+        GAMIFICAÇÃO AQUI!
       </a>
     </div>
 
@@ -95,10 +104,10 @@
         </svg>
       </div>
       <h3>Documentação</h3>
-      <p>Manual completo do usuário, guias de instalação e documentação técnica da plataforma EcoTrace.</p>
-      <a href="downloads/EcoTrace_Documentation_2.1.pdf" class="download-btn pulse-animation">
-        BAIXE O MANUAL AQUI!
-      </a>
+      <p>Manual completo do Ecotrace, seu desenvolvimento metas e objetivos</p>
+      <a href="https://raw.githubusercontent.com//Manual.pdf" download="Manual.pdf">
+    BAIXAR MANUAL
+
     </div>
 
   </div>
@@ -108,13 +117,15 @@
     © 2025 EcoTrace — Tecnologia e Sustentabilidade
   </footer>
 
-  <!-- SCRIPT DO MENU LATERAL + FIREBASE -->
-   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
-    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
-    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+  <!-- FIREBASE + SISTEMA -->
+  <script type="module">
+    import { initializeApp }     from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } 
+                                  from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+    import { getFirestore, doc, getDoc }
+                                  from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 
-    // ==== SUA CONFIG DO FIREBASE ====
+    // CONFIG FIREBASE
     const firebaseConfig = {
         apiKey: "AIzaSyAe7mU1MyCwrBmJlm89cKM-WHONzeqyU3w",
         authDomain: "projeto-ecotrace.firebaseapp.com",
@@ -140,8 +151,6 @@
     const adminBtn = document.getElementById("admin-btn");
     const nomeUsuarioH3 = document.getElementById("nome-usuario");
 
-    let notificou = false;
-
     function mostrarNotificacao(texto) {
         const notif = document.createElement("div");
         notif.classList.add("notificacao");
@@ -154,6 +163,7 @@
         }, 3500);
     }
 
+    // ================== ESTADO DO USUÁRIO ===================
     onAuthStateChanged(auth, async (user) => {
         if (user) {
             logadoDiv.style.display = "flex";
@@ -162,54 +172,215 @@
             const nome = user.displayName || user.email.split("@")[0];
             nomeUsuarioH3.textContent = nome;
 
-            // 🔹 Verifica se o usuário é admin
+            // Verificar admin
             const userDoc = await getDoc(doc(db, "usuarios", user.uid));
             const role = userDoc.exists() ? userDoc.data().role : "user";
 
-            if (role === "admin" && adminBtn) {
+            if (role === "admin") {
                 adminBtn.style.display = "block";
                 adminBtn.onclick = () => window.location.href = "dashboard.html";
-            } else if (adminBtn) {
-                adminBtn.style.display = "none";
             }
-
-            if (!notificou) {
-                mostrarNotificacao(`Bem-vindo de volta, ${nome}!`);
-                notificou = true;
-            }
-
         } else {
             logadoDiv.style.display = "none";
             deslogadoDiv.style.display = "flex";
             nomeUsuarioH3.textContent = "Visitante";
-            if (adminBtn) adminBtn.style.display = "none";
+            adminBtn.style.display = "none";
         }
     });
 
-    // 🔥 Logout
+    // Logout
     if (logoutBtn) {
-        logoutBtn.addEventListener("click", () => {
-            signOut(auth).then(() => {
-                window.location.href = "index.html";
-            });
-        });
+        logoutBtn.onclick = () => {
+            signOut(auth).then(() => location.href = "index.html");
+        };
     }
 
-    // ===== Abertura/fechamento do menu =====
-    perfilBtn.addEventListener("click", () => {
+    // MENU LATERAL
+    perfilBtn.onclick = () => {
         sideMenu.classList.add("open");
         overlay.classList.add("active");
-    });
+    };
 
-    closeBtn.addEventListener("click", () => {
+    closeBtn.onclick = overlay.onclick = () => {
         sideMenu.classList.remove("open");
         overlay.classList.remove("active");
+    };
+
+    // ================== GERAR PDF ===================
+   
+   // ================== GERAR PDF ===================
+const btnPlano = document.getElementById("baixar-plano");
+
+btnPlano.addEventListener("click", async () => {
+    const user = auth.currentUser;
+
+    if (!user) {
+        mostrarNotificacao("Você precisa estar logado.");
+        return;
+    }
+
+    const docRef = doc(db, "diagnosticos", user.uid);
+    const snapshot = await getDoc(docRef);
+
+    if (!snapshot.exists()) {
+        mostrarNotificacao("Nenhum diagnóstico encontrado.");
+        return;
+    }
+
+    const dados = snapshot.data();
+
+    // 🔥 Recalcular as recomendações prioritárias com base no score
+    const score = dados.pontuacao;
+
+    const categorias = [
+        {
+            faixa: [90, 100],
+            titulo: "Líder em Sustentabilidade",
+            descricao: "Sua empresa demonstra excelência em práticas sustentáveis e serve como referência mundial.",
+            recomendações: [
+                { item: "Participe de fóruns internacionais", peso: 3 },
+                { item: "Busque certificações avançadas (LEED Platinum, ESG+)", peso: 4 },
+                { item: "Mentore outras empresas iniciantes", peso: 2 }
+            ]
+        },
+        {
+            faixa: [75, 89],
+            titulo: "Avançado em Sustentabilidade",
+            descricao: "Desempenho sólido, com grande potencial para se tornar referência nacional.",
+            recomendações: [
+                { item: "Implante metas de carbono zero", peso: 4 },
+                { item: "Amplie certificações internacionais", peso: 3 },
+                { item: "Estabeleça parcerias com ONGs ambientais", peso: 2 }
+            ]
+        },
+        {
+            faixa: [60, 74],
+            titulo: "Em Transição Sustentável",
+            descricao: "Bom caminho percorrido, mas ainda há pontos estratégicos a evoluir.",
+            recomendações: [
+                { item: "Monte um comitê interno de sustentabilidade", peso: 3 },
+                { item: "Estabeleça metas mensuráveis (KPIs ESG)", peso: 4 },
+                { item: "Promova treinamentos internos contínuos", peso: 2 }
+            ]
+        },
+        {
+            faixa: [40, 59],
+            titulo: "Iniciante",
+            descricao: "Sua empresa iniciou a jornada, mas ainda há bastante espaço para evolução.",
+            recomendações: [
+                { item: "Realize auditorias ambientais trimestrais", peso: 3 },
+                { item: "Estruture um plano de ação sustentável", peso: 4 },
+                { item: "Comece com projetos simples e de impacto rápido", peso: 2 }
+            ]
+        },
+        {
+            faixa: [0, 39],
+            titulo: "Atenção Imediata",
+            descricao: "Níveis críticos. É essencial agir rapidamente para evitar prejuízos futuros.",
+            recomendações: [
+                { item: "Contrate consultoria especializada em ESG", peso: 5 },
+                { item: "Implemente políticas ambientais básicas", peso: 4 },
+                { item: "Eduque e conscientize sua equipe", peso: 3 }
+            ]
+        }
+    ];
+
+    const bloco = categorias.find(c => score >= c.faixa[0] && score <= c.faixa[1]);
+    const recomendacoesOrdenadas = bloco.recomendações.sort((a, b) => b.peso - a.peso);
+
+    // ==== CRIAÇÃO DO PDF ====
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF({ unit: "mm", format: "a4" });
+
+    // Cabeçalho
+    pdf.setFillColor(35, 171, 85);
+    pdf.rect(0, 0, 210, 25, "F");
+    pdf.setTextColor(255, 255, 255);
+    pdf.setFont("helvetica", "bold");
+    pdf.setFontSize(18);
+    pdf.text("Plano de Sustentabilidade – EcoTrace", 105, 15, { align: "center" });
+
+    // Info usuário
+    pdf.setFontSize(12);
+    pdf.setTextColor(0, 0, 0);
+    pdf.text(`Usuário: ${dados.nome}`, 10, 35);
+    pdf.text(`Empresa: ${dados.empresa}`, 10, 42);
+    pdf.text(`Pontuação: ${dados.pontuacao}%`, 10, 49);
+    pdf.text(`Categoria: ${dados.categoria}`, 10, 56);
+
+    // Tabela de respostas
+    const tabela = Object.entries(dados.respostas).map(([k, v]) => ({ Pergunta: k, Resposta: v }));
+
+    pdf.autoTable({
+        startY: 65,
+        head: [{ Pergunta: "Pergunta", Resposta: "Resposta" }],
+        body: tabela,
+        theme: "striped",
+        headStyles: {
+            fillColor: [35, 171, 85],
+            textColor: 255,
+        },
+        styles: { fontSize: 9 }
     });
 
-    overlay.addEventListener("click", () => {
-        sideMenu.classList.remove("open");
-        overlay.classList.remove("active");
+    // ============================
+    // 🔥 RECOMENDAÇÕES PRIORITÁRIAS
+    // ============================
+    let y = pdf.lastAutoTable.finalY + 10;
+    pdf.setFontSize(16);
+    pdf.text("Recomendações Prioritárias", 10, y);
+    y += 8;
+
+    recomendacoesOrdenadas.forEach(rec => {
+        pdf.setFontSize(12);
+        pdf.text(`• ${rec.item}  (Prioridade: ${rec.peso})`, 12, y);
+        y += 8;
     });
+
+    pdf.save("Plano_EcoTrace.pdf");
+});
+
+
+
+        // ==== CRIAÇÃO DO PDF ====
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF({ unit: "mm", format: "a4" });
+
+        pdf.setFillColor(35, 171, 85);
+        pdf.rect(0, 0, 210, 25, "F");
+
+        pdf.setTextColor(255, 255, 255);
+        pdf.setFont("helvetica", "bold");
+        pdf.setFontSize(18);
+        pdf.text("Plano de Sustentabilidade – EcoTrace", 105, 15, { align: "center" });
+
+        // Info usuário
+        pdf.setFontSize(12);
+        pdf.setTextColor(0, 0, 0);
+        pdf.text(`Usuário: ${user.displayName || user.email}`, 10, 40);
+
+        // Tabela
+        const tabela = Object.entries(dados).map(([k, v]) => ({ Pergunta: k, Resposta: v }));
+
+        pdf.autoTable({
+            startY: 50,
+            head: [{ Pergunta: "Pergunta", Resposta: "Resposta" }],
+            body: tabela,
+            theme: "striped",
+            headStyles: {
+                fillColor: [35, 171, 85],
+                textColor: 255,
+                fontSize: 12
+            },
+            styles: { cellPadding: 3, fontSize: 10 },
+            columnStyles: {
+                Pergunta: { cellWidth: 80 },
+                Resposta: { cellWidth: 110 }
+            }
+        });
+
+        pdf.save("Plano_EcoTrace.pdf");
+
 
   </script>
 </body>

@@ -105,7 +105,8 @@
         </div>
       </div>
 
-  
+   
+
       <!-- FORMULÁRIO (inicialmente oculto) -->
       <div id="form-container" class="hidden">
         <div class="progress-text">Progresso: <span id="progress-percent">0%</span></div>
@@ -505,17 +506,8 @@
           <p class="result-description" id="result-description"></p>
           <div class="recommendations" id="recommendations"></div>
           <button class="btn btn-restart" onclick="reiniciarQuestionario()">Fazer Novamente</button>
-          <button onclick="gerarPDF()" 
-        style="
-            margin-top: 20px; 
-            padding: 10px 20px; 
-            background: #00ffa7; 
-            border: none; 
-            border-radius: 8px; 
-            cursor: pointer; 
-            font-size: 16px;">
-    📄 Baixar Diagnóstico em PDF
-</button>
+          <br><br><br>
+          <h2>BAIXE O SEU PLANO NA ÁREA DE DOWNLOADS AGORA!</h2>
         </div>
       </div>
 
@@ -757,7 +749,7 @@ window.gerarPDF = gerarPDF;
             }
 
             if (!notificou) {
-            
+                
                 notificou = true;
             }
 

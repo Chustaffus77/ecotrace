@@ -498,7 +498,7 @@ footer {
 }
 
 .download-card p {
-    color: var(--cinza-escuro);
+    color:#d3fbdb;
     margin-bottom: 1.5rem;
     line-height: 1.6;
 }
@@ -526,7 +526,8 @@ footer {
     gap: 5px;
 }
 
-.download-btn {
+
+.download-btn,button#baixar-plano {
     padding: 12px 28px;
     background-color: #0c482e;
     color: var(--branco);
@@ -541,9 +542,39 @@ footer {
     margin-top: auto;
     min-width: 160px;
     justify-content: center;
+    border: none;
 }
 
-.download-btn:hover {
+
+.download-btn:hover, button#baixar-plano:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--glow), var(--shadow-hard);
+    background-color: #12764a;
+}
+
+
+button#baixar-plano {
+    font-size: 11pt;
+    font-family: "Mont";
+    padding: 15px 30px;
+    background-color: #0c482e;
+    color: var(--branco);
+    font-weight: bold;
+    border-radius: 200px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: var(--glow), var(--shadow-soft);
+    transition: var(--transition);
+    margin-top: auto;
+    min-width: 160px;
+    justify-content: center;
+    border: none;
+}
+
+
+ button#baixar-plano:hover {
     transform: translateY(-4px);
     box-shadow: var(--glow), var(--shadow-hard);
     background-color: #12764a;
