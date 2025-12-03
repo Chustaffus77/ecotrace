@@ -543,6 +543,7 @@ footer {
     min-width: 160px;
     justify-content: center;
     border: none;
+    
 }
 
 
@@ -550,6 +551,8 @@ footer {
     transform: translateY(-4px);
     box-shadow: var(--glow), var(--shadow-hard);
     background-color: #12764a;
+    
+cursor: pointer;
 }
 
 

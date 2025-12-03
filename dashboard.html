@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard Admin - EcoTrace</title>
+<title>Dashboard - EcoTrace</title>
   <link rel="icon" type="image/png" href="/imagens/image-removebg-preview (1).png">
 <!-- Google Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -56,6 +56,12 @@
       <i class="fas fa-file-alt"></i>
       <span>Relatórios</span>
     </button>
+
+    <!-- Após o botão de Relatórios -->
+<button id="waste-btn" class="menu-btn">
+  <i class="fas fa-recycle"></i>
+  <span>Rastreamento</span>
+</button>
     
     <div class="menu-divider"></div>
     
@@ -226,7 +232,250 @@
       </table>
     </div>
   </section>
+
+  <!-- RASTREAMENTO DE RESÍDUOS -->
+<section id="waste-card" class="card">
+  <div class="card-header">
+    <h2><i class="fas fa-recycle"></i> Rastreamento de Resíduos Industriais</h2>
+    <div class="card-actions">
+      <button class="btn-primary" id="simulate-tracking">
+        <i class="fas fa-play"></i> Simular Rastreamento
+      </button>
+      <button class="btn-secondary" id="generate-waste-report">
+        <i class="fas fa-file-pdf"></i> Gerar Relatório
+      </button>
+    </div>
+  </div>
+
+  <!-- FILTROS E CONTROLES -->
+  <div class="waste-controls">
+    <div class="filter-group">
+      <div class="filter-item">
+        <label for="waste-type"><i class="fas fa-filter"></i> Tipo de Resíduo</label>
+        <select id="waste-type" class="select-filter">
+          <option value="all">Todos os tipos</option>
+          <option value="solid">Sólido</option>
+          <option value="liquid">Líquido</option>
+          <option value="hazardous">Perigoso</option>
+          <option value="organic">Orgânico</option>
+          <option value="recyclable">Reciclável</option>
+        </select>
+      </div>
+      
+      <div class="filter-item">
+        <label for="waste-status"><i class="fas fa-traffic-light"></i> Status</label>
+        <select id="waste-status" class="select-filter">
+          <option value="all">Todos os status</option>
+          <option value="generated">Gerado</option>
+          <option value="in_transport">Em Transporte</option>
+          <option value="processing">Em Processamento</option>
+          <option value="disposed">Destinado</option>
+          <option value="recycled">Reciclado</option>
+        </select>
+      </div>
+      
+      <div class="filter-item">
+        <label for="date-range"><i class="fas fa-calendar"></i> Período</label>
+        <select id="date-range" class="select-filter">
+          <option value="today">Hoje</option>
+          <option value="week">Última semana</option>
+          <option value="month" selected>Último mês</option>
+          <option value="quarter">Último trimestre</option>
+          <option value="year">Último ano</option>
+        </select>
+      </div>
+    </div>
+    
+    <div class="search-box">
+      <i class="fas fa-search"></i>
+      <input type="text" id="waste-search" placeholder="Buscar por ID, empresa ou material...">
+    </div>
+  </div>
+
+  <!-- MAPA DE RASTREAMENTO -->
+  <div class="waste-map-container">
+    <h3><i class="fas fa-map-marked-alt"></i> Mapa de Rastreamento em Tempo Real</h3>
+    <div class="waste-map" id="waste-map">
+      <!-- Pontos no mapa -->
+      <div class="map-point" style="top: 20%; left: 25%;" data-status="generated">
+        <div class="point-pulse"></div>
+        <div class="point-tooltip">Ind. Metalúrgica A</div>
+      </div>
+      <div class="map-point" style="top: 45%; left: 40%;" data-status="in_transport">
+        <div class="point-pulse"></div>
+        <div class="point-tooltip">Transporte em andamento</div>
+      </div>
+      <div class="map-point" style="top: 60%; left: 65%;" data-status="processing">
+        <div class="point-pulse"></div>
+        <div class="point-tooltip">Centro de Reciclagem</div>
+      </div>
+      <div class="map-point" style="top: 75%; left: 80%;" data-status="disposed">
+        <div class="point-pulse"></div>
+        <div class="point-tooltip">Aterro Sanitário</div>
+      </div>
+      
+      <!-- Rotas -->
+      <div class="map-route route-1"></div>
+      <div class="map-route route-2"></div>
+      <div class="map-route route-3"></div>
+      
+      <!-- Legenda -->
+      <div class="map-legend">
+        <div class="legend-item">
+          <span class="legend-color status-generated"></span>
+          <span>Gerado</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-color status-in_transport"></span>
+          <span>Em Transporte</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-color status-processing"></span>
+          <span>Processamento</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-color status-disposed"></span>
+          <span>Destinado</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ESTATÍSTICAS EM TEMPO REAL -->
+  <div class="waste-stats-grid">
+    <div class="waste-stat-card">
+      <div class="stat-icon">
+        <i class="fas fa-weight-hanging"></i>
+      </div>
+      <div class="stat-content">
+        <h4>Total Monitorado</h4>
+        <span class="stat-value" id="total-waste">1,245.8</span>
+        <span class="stat-unit">toneladas</span>
+        <div class="stat-trend positive">
+          <i class="fas fa-arrow-up"></i>
+          <span>12% vs mês anterior</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="waste-stat-card">
+      <div class="stat-icon">
+        <i class="fas fa-recycle"></i>
+      </div>
+      <div class="stat-content">
+        <h4>Taxa de Reciclagem</h4>
+        <span class="stat-value" id="recycling-rate">67.3</span>
+        <span class="stat-unit">%</span>
+        <div class="stat-trend positive">
+          <i class="fas fa-arrow-up"></i>
+          <span>8.2% vs mês anterior</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="waste-stat-card">
+      <div class="stat-icon">
+        <i class="fas fa-truck"></i>
+      </div>
+      <div class="stat-content">
+        <h4>Em Transporte</h4>
+        <span class="stat-value" id="in-transport">42</span>
+        <span class="stat-unit">cargas</span>
+        <div class="stat-trend neutral">
+          <i class="fas fa-minus"></i>
+          <span>Estável</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="waste-stat-card">
+      <div class="stat-icon">
+        <i class="fas fa-exclamation-triangle"></i>
+      </div>
+      <div class="stat-content">
+        <h4>Resíduos Perigosos</h4>
+        <span class="stat-value" id="hazardous-waste">78.5</span>
+        <span class="stat-unit">toneladas</span>
+        <div class="stat-trend negative">
+          <i class="fas fa-arrow-down"></i>
+          <span>15% vs mês anterior</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LISTA DE RESÍDUOS EM TEMPO REAL -->
+  <div class="table-container">
+    <table id="waste-table">
+      <thead>
+        <tr>
+          <th>ID do Rastreio</th>
+          <th>Empresa Geradora</th>
+          <th>Tipo de Resíduo</th>
+          <th>Quantidade</th>
+          <th>Status</th>
+          <th>Localização Atual</th>
+          <th>Última Atualização</th>
+        </tr>
+      </thead>
+      <tbody id="waste-tbody">
+        <!-- Dados serão carregados via JavaScript -->
+      </tbody>
+    </table>
+  </div>
+
+  <!-- TIMELINE DE PROCESSAMENTO -->
+  <div class="waste-timeline">
+    <h3><i class="fas fa-history"></i> Timeline do Processamento</h3>
+    <div class="timeline-container">
+      <div class="timeline-item completed">
+        <div class="timeline-icon">
+          <i class="fas fa-industry"></i>
+        </div>
+        <div class="timeline-content">
+          <h4>Geração do Resíduo</h4>
+          <p>Indústria Metalúrgica ABC</p>
+          <span class="timeline-time">08:30 AM • Hoje</span>
+        </div>
+      </div>
+      
+      <div class="timeline-item active">
+        <div class="timeline-icon">
+          <i class="fas fa-truck-loading"></i>
+        </div>
+        <div class="timeline-content">
+          <h4>Coleta e Carregamento</h4>
+          <p>Transportadora VerdeLog</p>
+          <span class="timeline-time">10:15 AM • Em andamento</span>
+        </div>
+      </div>
+      
+      <div class="timeline-item pending">
+        <div class="timeline-icon">
+          <i class="fas fa-road"></i>
+        </div>
+        <div class="timeline-content">
+          <h4>Transporte</h4>
+          <p>Em trânsito para centro de reciclagem</p>
+          <span class="timeline-time">Estimado: 11:30 AM</span>
+        </div>
+      </div>
+      
+      <div class="timeline-item pending">
+        <div class="timeline-icon">
+          <i class="fas fa-recycle"></i>
+        </div>
+        <div class="timeline-content">
+          <h4>Processamento</h4>
+          <p>Centro de Reciclagem Sustentável</p>
+          <span class="timeline-time">Estimado: 2:00 PM</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 </main>
+
 
 <!-- NOTIFICAÇÃO -->
 <div class="notificacao" id="notificacao" aria-live="polite">
@@ -294,6 +543,7 @@ function setupEventListeners() {
     document.getElementById('logout-btn').addEventListener('click', handleLogout);
     document.getElementById('refresh-data').addEventListener('click', refreshAllData);
     document.getElementById('export-pdf').addEventListener('click', exportReports);
+    document.getElementById('waste-btn').addEventListener('click', () => showSection('waste-card'));
 }
 
 // Autenticação
@@ -741,6 +991,191 @@ function escapeHtml(unsafe) {
 
 // Inicializar aplicação
 document.addEventListener('DOMContentLoaded', init);
+
+
+
+// Adicionar evento para o botão do menu
+document.getElementById('waste-btn').addEventListener('click', () => showSection('waste-card'));
+
+// Dados simulados
+const simulatedWasteData = [
+  {
+    id: "TRACK-2024-001",
+    empresa: "Indústria Metalúrgica ABC",
+    tipo: "Metálico",
+    quantidade: "12.5 ton",
+    status: "in_transport",
+    localizacao: "Rodovia BR-101, km 45",
+    atualizacao: "10:30 AM"
+  },
+  {
+    id: "TRACK-2024-002",
+    empresa: "Plásticos Sustentáveis SA",
+    tipo: "Plástico",
+    quantidade: "8.2 ton",
+    status: "processing",
+    localizacao: "Centro de Reciclagem Norte",
+    atualizacao: "09:45 AM"
+  },
+  {
+    id: "TRACK-2024-003",
+    empresa: "Química Verde Ltda",
+    tipo: "Químico",
+    quantidade: "3.7 ton",
+    status: "generated",
+    localizacao: "Planta Industrial Zona Sul",
+    atualizacao: "08:15 AM"
+  },
+  {
+    id: "TRACK-2024-004",
+    empresa: "Minerais do Vale",
+    tipo: "Mineral",
+    quantidade: "25.1 ton",
+    status: "disposed",
+    localizacao: "Aterro Sanitário Controlado",
+    atualizacao: "Ontem, 16:20"
+  },
+  {
+    id: "TRACK-2024-005",
+    empresa: "Papel e Celulose XPTO",
+    tipo: "Papelão",
+    quantidade: "15.8 ton",
+    status: "in_transport",
+    localizacao: "Avenida Industrial, km 12",
+    atualizacao: "10:00 AM"
+  }
+];
+
+// Função para carregar dados simulados
+function loadWasteTrackingData() {
+  const tbody = document.getElementById('waste-tbody');
+  if (!tbody) return;
+  
+  let html = '';
+  simulatedWasteData.forEach(item => {
+    const statusMap = {
+      "generated": { text: "Gerado", class: "badge-warning" },
+      "in_transport": { text: "Em Transporte", class: "badge-in_transport" },
+      "processing": { text: "Processando", class: "badge-processing" },
+      "disposed": { text: "Destinado", class: "badge-success" }
+    };
+    
+    const status = statusMap[item.status] || { text: item.status, class: "" };
+    
+    html += `
+      <tr>
+        <td><strong>${item.id}</strong></td>
+        <td>${item.empresa}</td>
+        <td>
+          <span class="badge ${getWasteTypeBadge(item.tipo)}">
+            ${item.tipo}
+          </span>
+        </td>
+        <td>${item.quantidade}</td>
+        <td><span class="badge ${status.class}">${status.text}</span></td>
+        <td>${item.localizacao}</td>
+        <td>${item.atualizacao}</td>
+      </tr>
+    `;
+  });
+  
+  tbody.innerHTML = html;
+}
+
+function getWasteTypeBadge(type) {
+  const badges = {
+    "Metálico": "badge-warning",
+    "Plástico": "badge-info",
+    "Químico": "badge-danger",
+    "Mineral": "badge-secondary",
+    "Papelão": "badge-primary"
+  };
+  return badges[type] || "badge-secondary";
+}
+
+// Simulação de dados em tempo real
+function simulateRealTimeUpdates() {
+  // Atualizar contadores
+  const totalElement = document.getElementById('total-waste');
+  const recyclingElement = document.getElementById('recycling-rate');
+  const transportElement = document.getElementById('in-transport');
+  const hazardousElement = document.getElementById('hazardous-waste');
+  
+  if (totalElement) {
+    const current = parseFloat(totalElement.textContent.replace(',', ''));
+    totalElement.textContent = (current + (Math.random() * 0.5)).toFixed(1);
+  }
+  
+  if (recyclingElement) {
+    const current = parseFloat(recyclingElement.textContent);
+    const change = (Math.random() * 0.3) - 0.15;
+    recyclingElement.textContent = Math.max(0, Math.min(100, current + change)).toFixed(1);
+  }
+  
+  if (transportElement) {
+    const current = parseInt(transportElement.textContent);
+    transportElement.textContent = Math.max(0, current + (Math.random() > 0.7 ? 1 : -1));
+  }
+  
+  // Animar pontos no mapa
+  document.querySelectorAll('.point-pulse').forEach(pulse => {
+    pulse.style.animation = 'none';
+    setTimeout(() => {
+      pulse.style.animation = 'pulse 2s infinite';
+    }, 10);
+  });
+}
+
+// Event listeners para controles
+document.getElementById('simulate-tracking')?.addEventListener('click', () => {
+  simulateRealTimeUpdates();
+  showNotification('Simulação de rastreamento iniciada!', 'success');
+});
+
+document.getElementById('generate-waste-report')?.addEventListener('click', () => {
+  showNotification('Gerando relatório de resíduos...', 'info');
+  setTimeout(() => {
+    showNotification('Relatório gerado com sucesso!', 'success');
+    // Simular download
+    const link = document.createElement('a');
+    link.href = '#';
+    link.download = 'relatorio_residuos_ecotrace.pdf';
+    link.click();
+  }, 2000);
+});
+
+// Filtros
+document.querySelectorAll('.select-filter').forEach(select => {
+  select.addEventListener('change', () => {
+    showNotification('Filtros aplicados com sucesso!', 'success');
+  });
+});
+
+// Carregar dados iniciais quando a seção for ativada
+document.addEventListener('DOMContentLoaded', () => {
+  // Adicionar observer para detectar quando a seção de resíduos estiver ativa
+  const wasteSection = document.getElementById('waste-card');
+  if (wasteSection) {
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.attributeName === 'class' && 
+            wasteSection.classList.contains('active')) {
+          loadWasteTrackingData();
+          // Iniciar simulação em tempo real
+          setInterval(simulateRealTimeUpdates, 5000);
+        }
+      });
+    });
+    
+    observer.observe(wasteSection, { attributes: true });
+  }
+  
+  // Carregar dados inicialmente se a seção já estiver ativa
+  if (wasteSection?.classList.contains('active')) {
+    loadWasteTrackingData();
+    setInterval(simulateRealTimeUpdates, 5000);
+  }
+});
 </script>
 
 

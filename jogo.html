@@ -1,0 +1,1391 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoGuardian - Jogo de Sustentabilidade</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+      <link rel="icon" type="image/png" href="/imagens/image-removebg-preview (1).png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a5f23 0%, #2d8c45 100%);
+            color: #333;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 20px 0;
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        header h1 {
+            font-size: 3.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        header p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            opacity: 0.9;
+        }
+
+        .game-container {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .stats {
+            display: flex;
+            gap: 30px;
+        }
+
+        .stat-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 15px;
+            border-radius: 10px;
+            min-width: 120px;
+            color: white;
+        }
+
+        .eco-points {
+            background: linear-gradient(to right, #4CAF50, #2E7D32);
+        }
+
+        .carbon-footprint {
+            background: linear-gradient(to right, #FF9800, #EF6C00);
+        }
+
+        .recycling-rate {
+            background: linear-gradient(to right, #2196F3, #1565C0);
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            margin-top: 5px;
+        }
+
+        .game-content {
+            display: flex;
+            gap: 30px;
+        }
+
+        .game-board {
+            flex: 3;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            min-height: 500px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-sidebar {
+            flex: 1;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .game-title {
+            font-size: 1.8rem;
+            color: #2E7D32;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+        }
+
+        .phase-container {
+            display: none;
+        }
+
+        .phase-container.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .trash-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+            justify-content: center;
+        }
+
+        .trash-item {
+            width: 80px;
+            height: 80px;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: grab;
+            transition: transform 0.3s, box-shadow 0.3s;
+            padding: 10px;
+            font-size: 2.5rem;
+        }
+
+        .trash-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .trash-label {
+            font-size: 0.8rem;
+            margin-top: 5px;
+            text-align: center;
+        }
+
+        .bins-container {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 40px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .bin {
+            width: 150px;
+            height: 180px;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 10px;
+            color: white;
+            position: relative;
+            transition: transform 0.3s;
+        }
+
+        .bin:hover {
+            transform: scale(1.05);
+        }
+
+        .bin-icon {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+        }
+
+        .bin-label {
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .recycling-bin {
+            background: linear-gradient(to bottom, #2196F3, #0D47A1);
+        }
+
+        .compost-bin {
+            background: linear-gradient(to bottom, #8BC34A, #558B2F);
+        }
+
+        .landfill-bin {
+            background: linear-gradient(to bottom, #795548, #4E342E);
+        }
+
+        .hazardous-bin {
+            background: linear-gradient(to bottom, #F44336, #C62828);
+        }
+
+        .info-panel {
+            background-color: #f1f8e9;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .info-title {
+            color: #2E7D32;
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+        }
+
+        .info-text {
+            line-height: 1.5;
+        }
+
+        .progress-container {
+            margin: 20px 0;
+        }
+
+        .progress-bar {
+            height: 20px;
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(to right, #4CAF50, #8BC34A);
+            width: 0%;
+            transition: width 0.5s;
+        }
+
+        .phase-controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(to right, #4CAF50, #2E7D32);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(to right, #45a049, #1B5E20);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(to right, #2196F3, #1565C0);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: linear-gradient(to right, #1976D2, #0D47A1);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .fact-box {
+            background-color: #e8f5e9;
+            border-left: 5px solid #4CAF50;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .fact-title {
+            font-weight: bold;
+            color: #2E7D32;
+            margin-bottom: 5px;
+        }
+
+        .game-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            border-radius: 15px;
+            display: none;
+        }
+
+        .overlay-content {
+            background-color: white;
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 600px;
+        }
+
+        .overlay-content h2 {
+            color: #2E7D32;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .overlay-content p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .level-complete {
+            color: #4CAF50;
+            font-size: 1.5rem;
+            margin: 15px 0;
+        }
+
+        .badge {
+            display: inline-block;
+            background-color: #FFC107;
+            color: #333;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .achievements {
+            margin-top: 30px;
+        }
+
+        .achievement {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 10px;
+            background-color: #f1f8e9;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .achievement-icon {
+            font-size: 1.8rem;
+            color: #FF9800;
+        }
+
+        footer {
+            text-align: center;
+            color: white;
+            padding: 30px 0;
+            margin-top: 30px;
+        }
+
+        .phase-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .phase-dot {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background-color: #cccccc;
+        }
+
+        .phase-dot.active {
+            background-color: #4CAF50;
+        }
+
+        .trash-item.plastic {
+            background-color: #FFECB3;
+            color: #FF8F00;
+        }
+
+        .trash-item.paper {
+            background-color: #E3F2FD;
+            color: #1565C0;
+        }
+
+        .trash-item.glass {
+            background-color: #E8F5E9;
+            color: #2E7D32;
+        }
+
+        .trash-item.metal {
+            background-color: #F3E5F5;
+            color: #7B1FA2;
+        }
+
+        .trash-item.organic {
+            background-color: #FFF3E0;
+            color: #EF6C00;
+        }
+
+        .trash-item.electronic {
+            background-color: #FFEBEE;
+            color: #C62828;
+        }
+
+        @media (max-width: 992px) {
+            .game-content {
+                flex-direction: column;
+            }
+            
+            .game-header {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .stats {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .stats {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .bins-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            header h1 {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-leaf"></i> EcoGuardian</h1>
+            <p>Um jogo interativo sobre coleta seletiva, reciclagem e sustentabilidade. Aprenda a separar o lixo corretamente e reduza sua pegada de carbono!</p>
+        </header>
+
+        <div class="game-container">
+            <div class="game-header">
+                <div class="stats">
+                    <div class="stat-box eco-points">
+                        <div class="stat-value" id="eco-points">0</div>
+                        <div class="stat-label">Pontos Ecológicos</div>
+                    </div>
+                    <div class="stat-box carbon-footprint">
+                        <div class="stat-value" id="carbon-footprint">100%</div>
+                        <div class="stat-label">Pegada de Carbono</div>
+                    </div>
+                    <div class="stat-box recycling-rate">
+                        <div class="stat-value" id="recycling-rate">0%</div>
+                        <div class="stat-label">Taxa de Reciclagem</div>
+                    </div>
+                </div>
+                
+                <div class="phase-indicator">
+                    <div class="phase-dot active" data-phase="1"></div>
+                    <div class="phase-dot" data-phase="2"></div>
+                    <div class="phase-dot" data-phase="3"></div>
+                    <div class="phase-dot" data-phase="4"></div>
+                </div>
+            </div>
+
+            <div class="game-content">
+                <div class="game-board">
+                    <!-- Fase 1: Coleta Seletiva -->
+                    <div class="phase-container active" id="phase-1">
+                        <h2 class="game-title">Fase 1: Coleta Seletiva</h2>
+                        <div class="info-panel">
+                            <h3 class="info-title">Instruções</h3>
+                            <p class="info-text">Arraste cada item de lixo para a lixeira correta. Você ganha pontos por cada acerto e perde pontos por cada erro. Cada lixeira tem uma cor específica para um tipo de material:</p>
+                            <ul style="margin-left: 20px; margin-top: 10px;">
+                                <li><strong>Azul:</strong> Papel e papelão</li>
+                                <li><strong>Verde:</strong> Vidro</li>
+                                <li><strong>Vermelho:</strong> Plástico</li>
+                                <li><strong>Amarelo:</strong> Metal</li>
+                                <li><strong>Marrom:</strong> Orgânicos</li>
+                                <li><strong>Laranja:</strong> Resíduos perigosos</li>
+                            </ul>
+                        </div>
+
+                        <div class="trash-items">
+                            <!-- Itens de lixo serão gerados dinamicamente -->
+                        </div>
+
+                        <div class="bins-container">
+                            <div class="bin recycling-bin" data-bin="paper">
+                                <div class="bin-icon"><i class="fas fa-newspaper"></i></div>
+                                <div class="bin-label">Papel</div>
+                            </div>
+                            <div class="bin recycling-bin" data-bin="glass">
+                                <div class="bin-icon"><i class="fas fa-wine-bottle"></i></div>
+                                <div class="bin-label">Vidro</div>
+                            </div>
+                            <div class="bin recycling-bin" data-bin="plastic">
+                                <div class="bin-icon"><i class="fas fa-wine-bottle"></i></div>
+                                <div class="bin-label">Plástico</div>
+                            </div>
+                            <div class="bin recycling-bin" data-bin="metal">
+                                <div class="bin-icon"><i class="fas fa-cog"></i></div>
+                                <div class="bin-label">Metal</div>
+                            </div>
+                            <div class="bin compost-bin" data-bin="organic">
+                                <div class="bin-icon"><i class="fas fa-apple-alt"></i></div>
+                                <div class="bin-label">Orgânico</div>
+                            </div>
+                            <div class="bin hazardous-bin" data-bin="hazardous">
+                                <div class="bin-icon"><i class="fas fa-radiation"></i></div>
+                                <div class="bin-label">Perigoso</div>
+                            </div>
+                        </div>
+
+                        <div class="progress-container">
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="phase-1-progress"></div>
+                            </div>
+                            <div style="text-align: center; font-weight: bold;">Progresso: <span id="phase-1-progress-text">0/10</span></div>
+                        </div>
+                    </div>
+
+                    <!-- Fase 2: Redução de Resíduos -->
+                    <div class="phase-container" id="phase-2">
+                        <h2 class="game-title">Fase 2: Redução de Resíduos</h2>
+                        <div class="info-panel">
+                            <h3 class="info-title">Instruções</h3>
+                            <p class="info-text">Escolha a opção mais sustentável para cada situação do dia a dia. Cada decisão correta reduz sua pegada de carbono e aumenta seus pontos ecológicos.</p>
+                        </div>
+                        
+                        <div id="phase-2-content">
+                            <!-- Conteúdo será gerado dinamicamente -->
+                        </div>
+                        
+                        <div class="progress-container">
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="phase-2-progress"></div>
+                            </div>
+                            <div style="text-align: center; font-weight: bold;">Progresso: <span id="phase-2-progress-text">0/5</span></div>
+                        </div>
+                    </div>
+
+                    <!-- Fase 3: Compostagem -->
+                    <div class="phase-container" id="phase-3">
+                        <h2 class="game-title">Fase 3: Compostagem</h2>
+                        <div class="info-panel">
+                            <h3 class="info-title">Instruções</h3>
+                            <p class="info-text">Selecione os resíduos que podem ser compostados. A compostagem transforma resíduos orgânicos em adubo natural, reduzindo a quantidade de lixo em aterros sanitários.</p>
+                        </div>
+                        
+                        <div id="phase-3-content">
+                            <!-- Conteúdo será gerado dinamicamente -->
+                        </div>
+                        
+                        <div class="progress-container">
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="phase-3-progress"></div>
+                            </div>
+                            <div style="text-align: center; font-weight: bold;">Progresso: <span id="phase-3-progress-text">0/8</span></div>
+                        </div>
+                    </div>
+
+                    <!-- Fase 4: Impacto Ambiental -->
+                    <div class="phase-container" id="phase-4">
+                        <h2 class="game-title">Fase 4: Impacto Ambiental</h2>
+                        <div class="info-panel">
+                            <h3 class="info-title">Instruções</h3>
+                            <p class="info-text">Veja o impacto das suas escolhas no meio ambiente. Esta fase mostra como suas decisões afetam o planeta e como você pode melhorar ainda mais.</p>
+                        </div>
+                        
+                        <div id="phase-4-content">
+                            <!-- Conteúdo será gerado dinamicamente -->
+                        </div>
+                        
+                        <div class="progress-container">
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="phase-4-progress"></div>
+                            </div>
+                            <div style="text-align: center; font-weight: bold;">Progresso: <span id="phase-4-progress-text">0/1</span></div>
+                        </div>
+                    </div>
+
+                    <!-- Overlay de conclusão -->
+                    <div class="game-overlay" id="game-overlay">
+                        <div class="overlay-content">
+                            <h2 id="overlay-title">Parabéns!</h2>
+                            <div id="overlay-content">
+                                <!-- Conteúdo dinâmico -->
+                            </div>
+                            <button class="btn btn-primary" id="overlay-button">Continuar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="game-sidebar">
+                    <h2 class="game-title">Informações</h2>
+                    
+                    <div class="fact-box">
+                        <div class="fact-title">Você Sabia?</div>
+                        <div id="fact-text">O Brasil recicla apenas 3% de todo o lixo produzido, enquanto a média mundial é de 9%.</div>
+                    </div>
+                    
+                    <div class="achievements">
+                        <h3 style="color: #2E7D32; margin-bottom: 15px;">Conquistas</h3>
+                        <div id="achievements-list">
+                            <!-- Conquistas serão adicionadas dinamicamente -->
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 30px;">
+                        <h3 style="color: #2E7D32; margin-bottom: 15px;">Dicas Sustentáveis</h3>
+                        <ul style="padding-left: 20px; line-height: 1.6;">
+                            <li>Reduza o uso de plástico descartável</li>
+                            <li>Separe o lixo reciclável do orgânico</li>
+                            <li>Prefira produtos com embalagens reutilizáveis</li>
+                            <li>Conserte itens em vez de descartá-los</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="phase-controls">
+                <button class="btn btn-secondary" id="prev-phase">
+                    <i class="fas fa-arrow-left"></i> Fase Anterior
+                </button>
+                <button class="btn btn-primary" id="next-phase">
+                    Próxima Fase <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <footer>
+            <p>EcoGuardian - Jogo educativo sobre sustentabilidade e conscientização ambiental</p>
+            <p>Desenvolvido para promover práticas sustentáveis e a importância da coleta seletiva</p>
+        </footer>
+    </div>
+
+    <script>
+        // Dados do jogo
+        const gameData = {
+            currentPhase: 1,
+            ecoPoints: 0,
+            carbonFootprint: 100,
+            recyclingRate: 0,
+            phaseProgress: [0, 0, 0, 0],
+            phaseMaxProgress: [10, 5, 8, 1],
+            achievements: [],
+            facts: [
+                "O Brasil recicla apenas 3% de todo o lixo produzido, enquanto a média mundial é de 9%.",
+                "Cada brasileiro produz em média 1 kg de lixo por dia, totalizando mais de 200 mil toneladas diárias.",
+                "A reciclagem de uma única lata de alumínio economiza energia suficiente para manter uma TV ligada por 3 horas.",
+                "Plásticos podem levar até 450 anos para se decompor no meio ambiente.",
+                "A compostagem doméstica pode reduzir em até 50% o volume de lixo enviado para aterros sanitários.",
+                "Cada tonelada de papel reciclado poupa 22 árvores, economiza 71% de energia elétrica e reduz a poluição do ar em 74%.",
+                "O vidro é 100% reciclável e pode ser reutilizado infinitamente sem perder qualidade.",
+                "Resíduos eletrônicos contêm metais pesados como chumbo e mercúrio, que contaminam o solo e a água."
+            ],
+            trashItems: [
+                { name: "Garrafa PET", type: "plastic", icon: "fas fa-wine-bottle" },
+                { name: "Jornal", type: "paper", icon: "fas fa-newspaper" },
+                { name: "Lata de Refrigerante", type: "metal", icon: "fas fa-wine-bottle" },
+                { name: "Pote de Vidro", type: "glass", icon: "fas fa-wine-bottle" },
+                { name: "Casca de Banana", type: "organic", icon: "fas fa-apple-alt" },
+                { name: "Pilha Usada", type: "hazardous", icon: "fas fa-battery-full" },
+                { name: "Embalagem de Isopor", type: "plastic", icon: "fas fa-box" },
+                { name: "Folha de Papel", type: "paper", icon: "fas fa-file" },
+                { name: "Lata de Conserva", type: "metal", icon: "fas fa-cog" },
+                { name: "Garrafa de Vidro", type: "glass", icon: "fas fa-wine-bottle" },
+                { name: "Resto de Comida", type: "organic", icon: "fas fa-utensils" },
+                { name: "Lâmpada Fluorescente", type: "hazardous", icon: "fas fa-lightbulb" }
+            ],
+            correctBins: {
+                plastic: "plastic",
+                paper: "paper",
+                glass: "glass",
+                metal: "metal",
+                organic: "organic",
+                hazardous: "hazardous"
+            },
+            phase2Questions: [
+                {
+                    question: "No supermercado, você precisa escolher entre:",
+                    options: [
+                        { text: "Comprar legumes embalados em plástico", footprint: 10 },
+                        { text: "Comprar legumes a granel com sua própria sacola", footprint: -15, correct: true }
+                    ]
+                },
+                {
+                    question: "Para ir ao trabalho, você pode:",
+                    options: [
+                        { text: "Usar o carro sozinho", footprint: 20 },
+                        { text: "Ir de bicicleta ou a pé", footprint: -20, correct: true },
+                        { text: "Usar transporte público", footprint: -10, correct: true }
+                    ]
+                },
+                {
+                    question: "Ao terminar de beber água, você:",
+                    options: [
+                        { text: "Joga a garrafa plástica no lixo comum", footprint: 15 },
+                        { text: "Recicla a garrafa plástica", footprint: -10, correct: true },
+                        { text: "Usa uma garrafa reutilizável", footprint: -20, correct: true }
+                    ]
+                },
+                {
+                    question: "Quando um eletrodoméstico quebra, você:",
+                    options: [
+                        { text: "Compra um novo e joga o velho no lixo", footprint: 25 },
+                        { text: "Tenta consertar antes de comprar um novo", footprint: -15, correct: true },
+                        { text: "Descarta no local correto para eletrônicos", footprint: -10, correct: true }
+                    ]
+                },
+                {
+                    question: "Para reduzir o consumo de energia, você:",
+                    options: [
+                        { text: "Deixa luzes acesas em cômodos vazios", footprint: 15 },
+                        { text: "Troca lâmpadas comuns por LED", footprint: -15, correct: true },
+                        { text: "Desliga eletrônicos da tomada quando não usa", footprint: -10, correct: true }
+                    ]
+                }
+            ],
+            phase3Items: [
+                { name: "Cascas de Frutas", type: "compostable", icon: "fas fa-apple-alt" },
+                { name: "Guardanapo de Papel", type: "compostable", icon: "fas fa-leaf" },
+                { name: "Borra de Café", type: "compostable", icon: "fas fa-coffee" },
+                { name: "Casca de Ovo", type: "compostable", icon: "fas fa-egg" },
+                { name: "Folhas Secas", type: "compostable", icon: "fas fa-tree" },
+                { name: "Plástico Filme", type: "not-compostable", icon: "fas fa-film" },
+                { name: "Embalagem de Salgadinho", type: "not-compostable", icon: "fas fa-cookie" },
+                { name: "Osso de Frango", type: "not-compostable", icon: "fas fa-drumstick-bite" },
+                { name: "Saco Plástico", type: "not-compostable", icon: "fas fa-shopping-bag" }
+            ]
+        };
+
+        // Elementos DOM
+        const ecoPointsElement = document.getElementById('eco-points');
+        const carbonFootprintElement = document.getElementById('carbon-footprint');
+        const recyclingRateElement = document.getElementById('recycling-rate');
+        const phaseContainers = document.querySelectorAll('.phase-container');
+        const phaseDots = document.querySelectorAll('.phase-dot');
+        const prevPhaseButton = document.getElementById('prev-phase');
+        const nextPhaseButton = document.getElementById('next-phase');
+        const gameOverlay = document.getElementById('game-overlay');
+        const overlayTitle = document.getElementById('overlay-title');
+        const overlayContent = document.getElementById('overlay-content');
+        const overlayButton = document.getElementById('overlay-button');
+        const factText = document.getElementById('fact-text');
+        const achievementsList = document.getElementById('achievements-list');
+
+        // Inicialização do jogo
+        function initGame() {
+            updateStats();
+            showPhase(gameData.currentPhase);
+            setupPhase1();
+            updateFact();
+            updateAchievements();
+            
+            // Event listeners
+            prevPhaseButton.addEventListener('click', goToPrevPhase);
+            nextPhaseButton.addEventListener('click', goToNextPhase);
+            overlayButton.addEventListener('click', closeOverlay);
+            
+            // Inicializar arrastar e soltar para fase 1
+            setupDragAndDrop();
+        }
+
+        // Atualizar estatísticas na tela
+        function updateStats() {
+            ecoPointsElement.textContent = gameData.ecoPoints;
+            carbonFootprintElement.textContent = `${Math.max(0, gameData.carbonFootprint)}%`;
+            recyclingRateElement.textContent = `${gameData.recyclingRate}%`;
+            
+            // Atualizar barras de progresso
+            for (let i = 0; i < gameData.phaseProgress.length; i++) {
+                const progressBar = document.getElementById(`phase-${i+1}-progress`);
+                const progressText = document.getElementById(`phase-${i+1}-progress-text`);
+                
+                if (progressBar && progressText) {
+                    const progressPercent = (gameData.phaseProgress[i] / gameData.phaseMaxProgress[i]) * 100;
+                    progressBar.style.width = `${progressPercent}%`;
+                    progressText.textContent = `${gameData.phaseProgress[i]}/${gameData.phaseMaxProgress[i]}`;
+                }
+            }
+        }
+
+        // Mostrar fase específica
+        function showPhase(phaseNumber) {
+            // Esconder todas as fases
+            phaseContainers.forEach(container => {
+                container.classList.remove('active');
+            });
+            
+            // Mostrar fase atual
+            const currentPhase = document.getElementById(`phase-${phaseNumber}`);
+            if (currentPhase) {
+                currentPhase.classList.add('active');
+            }
+            
+            // Atualizar indicadores de fase
+            phaseDots.forEach(dot => {
+                dot.classList.remove('active');
+                if (parseInt(dot.dataset.phase) === phaseNumber) {
+                    dot.classList.add('active');
+                }
+            });
+            
+            // Atualizar estado dos botões
+            prevPhaseButton.disabled = phaseNumber === 1;
+            nextPhaseButton.disabled = phaseNumber === 4;
+            
+            // Atualizar texto do botão próximo
+            if (phaseNumber === 4) {
+                nextPhaseButton.innerHTML = 'Concluir <i class="fas fa-flag-checkered"></i>';
+            } else {
+                nextPhaseButton.innerHTML = 'Próxima Fase <i class="fas fa-arrow-right"></i>';
+            }
+        }
+
+        // Configurar fase 1
+        function setupPhase1() {
+            const trashItemsContainer = document.querySelector('.trash-items');
+            trashItemsContainer.innerHTML = '';
+            
+            // Selecionar 10 itens aleatórios
+            const shuffledItems = [...gameData.trashItems].sort(() => 0.5 - Math.random()).slice(0, 10);
+            
+            shuffledItems.forEach((item, index) => {
+                const trashElement = document.createElement('div');
+                trashElement.className = `trash-item ${item.type}`;
+                trashElement.dataset.type = item.type;
+                trashElement.dataset.id = index;
+                trashElement.draggable = true;
+                
+                trashElement.innerHTML = `
+                    <i class="${item.icon}"></i>
+                    <div class="trash-label">${item.name}</div>
+                `;
+                
+                trashItemsContainer.appendChild(trashElement);
+            });
+        }
+
+        // Configurar arrastar e soltar
+        function setupDragAndDrop() {
+            const trashItems = document.querySelectorAll('.trash-item');
+            const bins = document.querySelectorAll('.bin');
+            
+            trashItems.forEach(item => {
+                item.addEventListener('dragstart', handleDragStart);
+            });
+            
+            bins.forEach(bin => {
+                bin.addEventListener('dragover', handleDragOver);
+                bin.addEventListener('drop', handleDrop);
+            });
+        }
+
+        function handleDragStart(e) {
+            e.dataTransfer.setData('text/plain', e.target.dataset.type);
+            e.dataTransfer.setData('id', e.target.dataset.id);
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            const trashType = e.dataTransfer.getData('text/plain');
+            const trashId = e.dataTransfer.getData('id');
+            const binType = e.currentTarget.dataset.bin;
+            
+            // Verificar se o item foi colocado na lixeira correta
+            const isCorrect = gameData.correctBins[trashType] === binType;
+            
+            // Remover item da tela
+            const draggedElement = document.querySelector(`.trash-item[data-id="${trashId}"]`);
+            if (draggedElement) {
+                draggedElement.style.visibility = 'hidden';
+                
+                // Mostrar feedback visual
+                e.currentTarget.style.transform = 'scale(1.1)';
+                setTimeout(() => {
+                    e.currentTarget.style.transform = 'scale(1)';
+                }, 300);
+            }
+            
+            // Atualizar pontos e progresso
+            if (isCorrect) {
+                gameData.ecoPoints += 10;
+                gameData.recyclingRate += 10;
+                gameData.carbonFootprint -= 2;
+                
+                // Verificar conquista
+                if (gameData.ecoPoints >= 50 && !gameData.achievements.includes('reciclagem_mestre')) {
+                    gameData.achievements.push('reciclagem_mestre');
+                    showAchievement('Reciclagem Mestre', 'Você alcançou 50 pontos reciclando!');
+                }
+            } else {
+                gameData.ecoPoints = Math.max(0, gameData.ecoPoints - 5);
+                gameData.carbonFootprint += 5;
+            }
+            
+            // Atualizar progresso da fase
+            gameData.phaseProgress[0]++;
+            
+            // Atualizar estatísticas
+            updateStats();
+            
+            // Verificar se fase foi concluída
+            if (gameData.phaseProgress[0] >= gameData.phaseMaxProgress[0]) {
+                setTimeout(() => {
+                    showPhaseComplete(1);
+                }, 500);
+            }
+        }
+
+        // Mostrar conclusão de fase
+        function showPhaseComplete(phaseNumber) {
+            let title, message, buttonText;
+            
+            if (phaseNumber < 4) {
+                title = "Fase Concluída!";
+                message = `
+                    <p class="level-complete">Você completou a Fase ${phaseNumber}!</p>
+                    <p>Você ganhou <span class="badge">${phaseNumber === 1 ? 100 : 50} pontos</span> por concluir esta fase.</p>
+                    <p>Continue para a próxima fase para aprender mais sobre sustentabilidade!</p>
+                `;
+                buttonText = "Próxima Fase";
+            } else {
+                title = "Jogo Concluído!";
+                message = `
+                    <p class="level-complete">Parabéns, você completou todas as fases do EcoGuardian!</p>
+                    <p>Sua pontuação final: <span class="badge">${gameData.ecoPoints} pontos</span></p>
+                    <p>Sua pegada de carbono final: <span class="badge">${gameData.carbonFootprint}%</span></p>
+                    <p>Taxa de reciclagem: <span class="badge">${gameData.recyclingRate}%</span></p>
+                    <p>Obrigado por aprender sobre sustentabilidade e coleta seletiva!</p>
+                `;
+                buttonText = "Jogar Novamente";
+                
+                // Conquista final
+                if (!gameData.achievements.includes('guardiao_verde')) {
+                    gameData.achievements.push('guardiao_verde');
+                    showAchievement('Guardião Verde', 'Você completou todas as fases do jogo!');
+                }
+            }
+            
+            // Adicionar pontos bônus
+            if (phaseNumber < 4) {
+                gameData.ecoPoints += (phaseNumber === 1 ? 100 : 50);
+            }
+            
+            overlayTitle.textContent = title;
+            overlayContent.innerHTML = message;
+            overlayButton.textContent = buttonText;
+            
+            // Configurar ação do botão
+            overlayButton.onclick = phaseNumber < 4 ? goToNextPhase : restartGame;
+            
+            gameOverlay.style.display = 'flex';
+            updateStats();
+        }
+
+        // Navegar para próxima fase
+        function goToNextPhase() {
+            if (gameData.currentPhase < 4) {
+                gameData.currentPhase++;
+                showPhase(gameData.currentPhase);
+                
+                // Configurar conteúdo da nova fase
+                if (gameData.currentPhase === 2) {
+                    setupPhase2();
+                } else if (gameData.currentPhase === 3) {
+                    setupPhase3();
+                } else if (gameData.currentPhase === 4) {
+                    setupPhase4();
+                }
+            } else {
+                // Concluir jogo
+                showPhaseComplete(4);
+            }
+            
+            closeOverlay();
+        }
+
+        // Navegar para fase anterior
+        function goToPrevPhase() {
+            if (gameData.currentPhase > 1) {
+                gameData.currentPhase--;
+                showPhase(gameData.currentPhase);
+            }
+        }
+
+        // Configurar fase 2
+        function setupPhase2() {
+            const phase2Content = document.getElementById('phase-2-content');
+            phase2Content.innerHTML = '';
+            
+            gameData.phase2Questions.forEach((question, index) => {
+                const questionElement = document.createElement('div');
+                questionElement.className = 'info-panel';
+                questionElement.style.marginBottom = '20px';
+                
+                let optionsHTML = '';
+                question.options.forEach((option, optIndex) => {
+                    optionsHTML += `
+                        <div style="margin: 10px 0;">
+                            <button class="btn btn-secondary" style="width: 100%; text-align: left; justify-content: flex-start;" 
+                                    data-question="${index}" data-option="${optIndex}" data-footprint="${option.footprint}">
+                                ${option.text}
+                                ${option.correct ? '<i class="fas fa-leaf" style="margin-left: auto;"></i>' : ''}
+                            </button>
+                        </div>
+                    `;
+                });
+                
+                questionElement.innerHTML = `
+                    <h3 style="color: #2E7D32; margin-bottom: 10px;">${question.question}</h3>
+                    ${optionsHTML}
+                `;
+                
+                phase2Content.appendChild(questionElement);
+            });
+            
+            // Adicionar event listeners aos botões
+            document.querySelectorAll('#phase-2-content button').forEach(button => {
+                button.addEventListener('click', handlePhase2Choice);
+            });
+        }
+
+        // Manipular escolha na fase 2
+        function handlePhase2Choice(e) {
+            const questionIndex = parseInt(e.target.dataset.question);
+            const optionIndex = parseInt(e.target.dataset.option);
+            const footprintChange = parseInt(e.target.dataset.footprint);
+            
+            // Desabilitar todos os botões desta pergunta
+            const questionButtons = document.querySelectorAll(`button[data-question="${questionIndex}"]`);
+            questionButtons.forEach(btn => {
+                btn.disabled = true;
+            });
+            
+            // Destacar resposta correta
+            const correctOption = gameData.phase2Questions[questionIndex].options.find(opt => opt.correct);
+            const isCorrect = gameData.phase2Questions[questionIndex].options[optionIndex].correct;
+            
+            if (isCorrect) {
+                e.target.style.background = 'linear-gradient(to right, #4CAF50, #2E7D32)';
+            } else {
+                e.target.style.background = 'linear-gradient(to right, #F44336, #C62828)';
+                
+                // Destacar a resposta correta
+                questionButtons.forEach(btn => {
+                    if (parseInt(btn.dataset.option) === gameData.phase2Questions[questionIndex].options.findIndex(opt => opt.correct)) {
+                        btn.style.background = 'linear-gradient(to right, #4CAF50, #2E7D32)';
+                    }
+                });
+            }
+            
+            // Atualizar estatísticas
+            gameData.ecoPoints += isCorrect ? 15 : 0;
+            gameData.carbonFootprint = Math.max(0, gameData.carbonFootprint + footprintChange);
+            
+            // Atualizar progresso
+            gameData.phaseProgress[1]++;
+            
+            updateStats();
+            
+            // Verificar se fase foi concluída
+            if (gameData.phaseProgress[1] >= gameData.phaseMaxProgress[1]) {
+                setTimeout(() => {
+                    showPhaseComplete(2);
+                }, 1000);
+            }
+        }
+
+        // Configurar fase 3
+        function setupPhase3() {
+            const phase3Content = document.getElementById('phase-3-content');
+            phase3Content.innerHTML = '';
+            
+            // Adicionar instrução
+            const instruction = document.createElement('div');
+            instruction.className = 'info-panel';
+            instruction.innerHTML = `
+                <h3 style="color: #2E7D32; margin-bottom: 10px;">Selecione os itens que podem ser compostados:</h3>
+                <p>Clique nos itens que podem ser adicionados à composteira. Itens compostáveis se decompõem naturalmente e viram adubo.</p>
+            `;
+            phase3Content.appendChild(instruction);
+            
+            // Adicionar itens
+            const itemsContainer = document.createElement('div');
+            itemsContainer.className = 'trash-items';
+            itemsContainer.style.marginTop = '20px';
+            itemsContainer.style.justifyContent = 'center';
+            
+            gameData.phase3Items.forEach((item, index) => {
+                const itemElement = document.createElement('div');
+                itemElement.className = `trash-item ${item.type === 'compostable' ? 'organic' : 'hazardous'}`;
+                itemElement.dataset.type = item.type;
+                itemElement.dataset.id = index;
+                
+                itemElement.innerHTML = `
+                    <i class="${item.icon}"></i>
+                    <div class="trash-label">${item.name}</div>
+                `;
+                
+                itemElement.addEventListener('click', () => handlePhase3Choice(itemElement, item.type === 'compostable'));
+                
+                itemsContainer.appendChild(itemElement);
+            });
+            
+            phase3Content.appendChild(itemsContainer);
+            
+            // Adicionar área de compostagem
+            const compostArea = document.createElement('div');
+            compostArea.className = 'bin compost-bin';
+            compostArea.style.margin = '30px auto';
+            compostArea.style.width = '200px';
+            compostArea.innerHTML = `
+                <div class="bin-icon"><i class="fas fa-recycle"></i></div>
+                <div class="bin-label">Composteira</div>
+                <div id="compost-count" style="margin-top: 10px; font-size: 1.2rem;">0 itens</div>
+            `;
+            phase3Content.appendChild(compostArea);
+        }
+
+        // Manipular escolha na fase 3
+        function handlePhase3Choice(element, isCompostable) {
+            // Desabilitar elemento
+            element.style.opacity = '0.5';
+            element.style.pointerEvents = 'none';
+            
+            // Atualizar contador de compostagem
+            const compostCountElement = document.getElementById('compost-count');
+            let currentCount = parseInt(compostCountElement.textContent) || 0;
+            
+            if (isCompostable) {
+                // Resposta correta
+                element.style.border = '3px solid #4CAF50';
+                gameData.ecoPoints += 10;
+                gameData.carbonFootprint -= 3;
+                currentCount++;
+            } else {
+                // Resposta incorreta
+                element.style.border = '3px solid #F44336';
+                gameData.ecoPoints = Math.max(0, gameData.ecoPoints - 5);
+                gameData.carbonFootprint += 3;
+            }
+            
+            compostCountElement.textContent = `${currentCount} itens`;
+            
+            // Atualizar progresso
+            gameData.phaseProgress[2]++;
+            
+            updateStats();
+            
+            // Verificar se fase foi concluída
+            if (gameData.phaseProgress[2] >= gameData.phaseMaxProgress[2]) {
+                setTimeout(() => {
+                    showPhaseComplete(3);
+                }, 1000);
+            }
+        }
+
+        // Configurar fase 4
+        function setupPhase4() {
+            const phase4Content = document.getElementById('phase-4-content');
+            phase4Content.innerHTML = '';
+            
+            // Calcular impacto
+            const treesSaved = Math.floor(gameData.ecoPoints / 20);
+            const co2Reduced = 100 - gameData.carbonFootprint;
+            const wasteDiverted = Math.floor(gameData.recyclingRate / 10);
+            
+            const impactHTML = `
+                <div class="info-panel" style="text-align: center;">
+                    <h3 style="color: #2E7D32; margin-bottom: 20px;">Seu Impacto Ambiental</h3>
+                    
+                    <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 20px; margin-bottom: 30px;">
+                        <div class="stat-box eco-points" style="min-width: 180px;">
+                            <div class="stat-value">${treesSaved}</div>
+                            <div class="stat-label">Árvores Salvas</div>
+                        </div>
+                        
+                        <div class="stat-box carbon-footprint" style="min-width: 180px;">
+                            <div class="stat-value">${co2Reduced}%</div>
+                            <div class="stat-label">CO₂ Reduzido</div>
+                        </div>
+                        
+                        <div class="stat-box recycling-rate" style="min-width: 180px;">
+                            <div class="stat-value">${wasteDiverted}</div>
+                            <div class="stat-label">Kg de Lixo Desviados</div>
+                        </div>
+                    </div>
+                    
+                    <p style="margin-bottom: 15px;">Com base nas suas escolhas no jogo, você contribuiu para:</p>
+                    <ul style="text-align: left; display: inline-block; margin-bottom: 20px;">
+                        <li>Preservação de recursos naturais</li>
+                        <li>Redução da poluição do ar e água</li>
+                        <li>Diminuição do lixo em aterros sanitários</li>
+                        <li>Economia de energia</li>
+                    </ul>
+                    
+                    <div class="fact-box" style="margin-top: 20px;">
+                        <div class="fact-title">Continue Fazendo a Diferença!</div>
+                        <div>Pequenas ações no dia a dia têm grande impacto no meio ambiente. Continue praticando a sustentabilidade!</div>
+                    </div>
+                </div>
+            `;
+            
+            phase4Content.innerHTML = impactHTML;
+            
+            // Marcar progresso da fase 4 como completo
+            gameData.phaseProgress[3] = 1;
+            updateStats();
+        }
+
+        // Mostrar conquista
+        function showAchievement(title, description) {
+            const achievementElement = document.createElement('div');
+            achievementElement.className = 'achievement';
+            achievementElement.innerHTML = `
+                <div class="achievement-icon"><i class="fas fa-trophy"></i></div>
+                <div>
+                    <div style="font-weight: bold;">${title}</div>
+                    <div style="font-size: 0.9rem;">${description}</div>
+                </div>
+            `;
+            
+            achievementsList.appendChild(achievementElement);
+            
+            // Mostrar notificação
+            const notification = document.createElement('div');
+            notification.style.position = 'fixed';
+            notification.style.top = '20px';
+            notification.style.right = '20px';
+            notification.style.background = 'linear-gradient(to right, #FFC107, #FF9800)';
+            notification.style.color = '#333';
+            notification.style.padding = '15px';
+            notification.style.borderRadius = '10px';
+            notification.style.boxShadow = '0 5px 15px rgba(0,0,0,0.2)';
+            notification.style.zIndex = '1000';
+            notification.style.display = 'flex';
+            notification.style.alignItems = 'center';
+            notification.style.gap = '10px';
+            notification.innerHTML = `
+                <i class="fas fa-trophy" style="font-size: 1.5rem;"></i>
+                <div>
+                    <div style="font-weight: bold;">Conquista Desbloqueada!</div>
+                    <div>${title}</div>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Remover notificação após 3 segundos
+            setTimeout(() => {
+                notification.style.transition = 'opacity 0.5s';
+                notification.style.opacity = '0';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 500);
+            }, 3000);
+        }
+
+        // Atualizar conquistas
+        function updateAchievements() {
+            achievementsList.innerHTML = '';
+            
+            const allAchievements = [
+                { id: 'primeiros_passos', title: 'Primeiros Passos', description: 'Complete a primeira fase do jogo', condition: () => gameData.phaseProgress[0] >= gameData.phaseMaxProgress[0] },
+                { id: 'reciclagem_mestre', title: 'Reciclagem Mestre', description: 'Alcance 50 pontos ecológicos', condition: () => gameData.ecoPoints >= 50 },
+                { id: 'pegada_leve', title: 'Pegada Leve', description: 'Reduza sua pegada de carbono para menos de 50%', condition: () => gameData.carbonFootprint <= 50 },
+                { id: 'compostagem_expert', title: 'Compostagem Expert', description: 'Identifique corretamente todos os itens compostáveis', condition: () => gameData.phaseProgress[2] >= gameData.phaseMaxProgress[2] },
+                { id: 'guardiao_verde', title: 'Guardião Verde', description: 'Complete todas as fases do jogo', condition: () => gameData.phaseProgress[3] >= gameData.phaseMaxProgress[3] }
+            ];
+            
+            allAchievements.forEach(achievement => {
+                if (achievement.condition()) {
+                    if (!gameData.achievements.includes(achievement.id)) {
+                        gameData.achievements.push(achievement.id);
+                    }
+                    
+                    const achievementElement = document.createElement('div');
+                    achievementElement.className = 'achievement';
+                    achievementElement.innerHTML = `
+                        <div class="achievement-icon"><i class="fas fa-trophy"></i></div>
+                        <div>
+                            <div style="font-weight: bold;">${achievement.title}</div>
+                            <div style="font-size: 0.9rem;">${achievement.description}</div>
+                        </div>
+                    `;
+                    
+                    achievementsList.appendChild(achievementElement);
+                }
+            });
+            
+            // Se não houver conquistas, mostrar mensagem
+            if (achievementsList.children.length === 0) {
+                achievementsList.innerHTML = '<p style="text-align: center; color: #666;">Complete fases para desbloquear conquistas!</p>';
+            }
+        }
+
+        // Atualizar fato interessante
+        function updateFact() {
+            const randomFact = gameData.facts[Math.floor(Math.random() * gameData.facts.length)];
+            factText.textContent = randomFact;
+            
+            // Atualizar a cada 30 segundos
+            setTimeout(updateFact, 30000);
+        }
+
+        // Fechar overlay
+        function closeOverlay() {
+            gameOverlay.style.display = 'none';
+        }
+
+        // Reiniciar jogo
+        function restartGame() {
+            gameData.currentPhase = 1;
+            gameData.ecoPoints = 0;
+            gameData.carbonFootprint = 100;
+            gameData.recyclingRate = 0;
+            gameData.phaseProgress = [0, 0, 0, 0];
+            
+            updateStats();
+            showPhase(1);
+            setupPhase1();
+            updateAchievements();
+            closeOverlay();
+        }
+
+        // Inicializar o jogo quando a página carregar
+        window.addEventListener('DOMContentLoaded', initGame);
+    </script>
+</body>
+</html>

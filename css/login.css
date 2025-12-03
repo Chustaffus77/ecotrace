@@ -90,7 +90,6 @@ main {
     align-items: center;
   }
 }
-
 /* ====== TABS (AGORA ANIMADAS) ====== */
 .tab {
   padding: 12px 35px;
@@ -102,13 +101,14 @@ main {
   background: #97a7c3;
   color: #0d1e19;
   transition: 
-    background .30s ease,
-    color .30s ease,
-    transform .25s ease,
-    box-shadow .25s ease;
+    background 0.3s ease,
+    color 0.3s ease,
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
   min-width: 150px;
 }
 
+/* Responsivo */
 @media (max-width: 480px) {
   .tab {
     padding: 10px 25px;
@@ -123,12 +123,26 @@ main {
   box-shadow: 0 0 10px #39e00055;
 }
 
-/* Quando ativa */
+/* Quando ativa (classe adicionada pelo JS) */
 .tab.active {
-  background: #39e000 !important;
-  color: #000 !important;
+  background: #39e000;
+  color: #000;
   transform: scale(1.12);
   box-shadow: 0 0 15px #39e000aa;
+}
+
+/* ====== ABAS ====== */
+.aba {
+  display: none; /* escondemos todas por padrão */
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.aba.active {
+  display: block; /* ativa a aba */
+  opacity: 1;
+  transform: translateY(0);
 }
 
 /* ====== TÍTULOS ====== */
@@ -137,6 +151,7 @@ h2 {
   font-size: clamp(24px, 5vw, 32px);
   font-weight: 700;
 }
+
 
 /* ====== INPUTS ====== */
 .form-group {
@@ -499,4 +514,41 @@ footer {
   main {
     margin-top: 0;
   }
+}
+
+.google-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.google-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 24px;
+  background-color: #ffffff;
+  border: 2px solid #ddd;
+  border-radius: 80px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  width: 100%;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.google-btn img {
+  width: 24px;
+  height: 24px;
+}
+
+.google-btn:hover {
+  background-color: #f2f2f2;
+  border-color: #ccc;
+  transform: translateY(-5px);
+}
+
+.google-btn:active {
+  transform: scale(0.98);
 }

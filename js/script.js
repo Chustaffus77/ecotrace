@@ -48,31 +48,46 @@ class LoadingManager {
 const loadingManager = new LoadingManager();
 
 // ==========================================================
-// Sistema de Abas
+// Sistema de Abas (refatorado)
 // ==========================================================
 class TabManager {
-  constructor() {
-    this.tabs = document.querySelectorAll('.aba');
-    this.buttons = document.querySelectorAll('.tab');
+  constructor(tabSelector = '.aba', buttonSelector = '.tab') {
+    this.tabs = document.querySelectorAll(tabSelector);
+    this.buttons = document.querySelectorAll(buttonSelector);
+
+    if (!this.tabs.length || !this.buttons.length) {
+      console.warn('TabManager: nenhuma aba ou botão encontrado');
+      return;
+    }
+
     this.init();
+    this.showTab(this.tabs[0].id); // ativa a primeira aba por padrão
   }
+
   init() {
     this.buttons.forEach(button => {
-      button.addEventListener('click', (e) => {
-        const targetAba = e.target.getAttribute('data-target');
-        if (targetAba) this.showTab(targetAba);
+      button.addEventListener('click', () => {
+        const target = button.dataset.target;
+        if (target) this.showTab(target);
       });
     });
   }
+
   showTab(abaId) {
-    if (!document.getElementById(abaId)) return console.error(`Aba ${abaId} não encontrada`);
+    const targetTab = document.getElementById(abaId);
+    if (!targetTab) return console.error(`TabManager: aba "${abaId}" não encontrada`);
+
+    // Remove active de todas abas e botões
     this.tabs.forEach(tab => tab.classList.remove('active'));
     this.buttons.forEach(btn => btn.classList.remove('active'));
-    document.getElementById(abaId).classList.add('active');
-    const activeButton = document.querySelector(`[data-target="${abaId}"]`);
+
+    // Ativa a aba e o botão correspondente
+    targetTab.classList.add('active');
+    const activeButton = [...this.buttons].find(btn => btn.dataset.target === abaId);
     if (activeButton) activeButton.classList.add('active');
   }
 }
+
 
 // ==========================================================
 // Firebase Service (modular, v9.22.2)
@@ -91,7 +106,7 @@ class FirebaseService {
       const authModule = await import("https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js");
       const firestoreModule = await import("https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js");
 
-      const { getAuth, GoogleAuthProvider, FacebookAuthProvider, OAuthProvider, setPersistence, browserLocalPersistence } = authModule;
+      const { getAuth, GoogleAuthProvider, OAuthProvider, setPersistence, browserLocalPersistence } = authModule;
       const { getFirestore } = firestoreModule;
 
       const firebaseConfig = {
@@ -111,8 +126,6 @@ class FirebaseService {
 
       // Inicializa provedores OAuth
       this.providers.set('google', new GoogleAuthProvider());
-      this.providers.set('facebook', new FacebookAuthProvider());
-      this.providers.set('microsoft', new OAuthProvider('microsoft.com'));
 
       AppState.isInitialized = true;
       console.log('Firebase inicializado com sucesso (v9.22.2)');
@@ -212,21 +225,31 @@ class AuthService {
     }
   }
 
-  async handleOAuthLogin(providerName) {
-    try {
-      loadingManager.show();
-      const providerNames = { 'google': 'Google', 'facebook': 'Facebook', 'microsoft': 'Microsoft' };
-      await this.firebaseService.signInWithProvider(providerName);
-      popupManager.show(`Login com ${providerNames[providerName]} realizado!`, "ok");
-      setTimeout(() => { window.location.href = "index.html"; }, 900);
-    } catch (error) {
-      console.error('OAuth error:', error);
-      popupManager.show(this.getFriendlyErrorMessage(error.code), "erro");
-      throw error;
-    } finally {
-      loadingManager.hide();
-    }
+ async handleOAuthLogin(providerName) {
+  try {
+    loadingManager.show();
+    const result = await this.firebaseService.signInWithProvider(providerName);
+    const user = result.user;
+
+    // Salva ou atualiza dados no Firestore
+    await this.firebaseService.saveUserData(user.uid, {
+      nome: user.displayName,
+      email: user.email,
+      uid: user.uid,
+      role: "user",
+      dataCriacao: new Date().toISOString()
+    });
+
+    popupManager.show(`Login com Google realizado!`, "ok");
+    setTimeout(() => { window.location.href = "index.html"; }, 900);
+  } catch (error) {
+    console.error('OAuth error:', error);
+    popupManager.show(this.getFriendlyErrorMessage(error.code), "erro");
+    throw error;
+  } finally {
+    loadingManager.hide();
   }
+}
 
   async logout() {
     try {
@@ -257,6 +280,10 @@ class AuthService {
   }
 }
 const authService = new AuthService();
+
+
+
+
 
 // ==========================================================
 // Aplicação principal
@@ -313,7 +340,7 @@ class App {
   }
 
   setupOAuthButtons() {
-    ['google','facebook','microsoft'].forEach(provider => {
+    ['google'].forEach(provider => {
       const button = document.querySelector(`[data-oauth="${provider}"]`);
       if (button) button.addEventListener('click', () => authService.handleOAuthLogin(provider));
     });
@@ -396,8 +423,6 @@ function mostrarAba(aba) {
 // Globais
 // ==========================================================
 window.loginGoogle = () => authService.handleOAuthLogin('google');
-window.loginFacebook = () => authService.handleOAuthLogin('facebook');
-window.loginMicrosoft = () => authService.handleOAuthLogin('microsoft');
 window.mostrarAba = mostrarAba;
 function showPopup(msg, tipo = "ok") { popupManager.show(msg, tipo); }
 function showLoading(show) { loadingManager.toggle(show); }
