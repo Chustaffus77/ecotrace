@@ -6,124 +6,238 @@
 <title>Dashboard Admin - EcoTrace</title>
 
 <!-- Google Fonts -->
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<!-- CSS Mega Blaster -->
-<link rel="stylesheet" href="/css/dash.css">
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="css/dash.css"
 </head>
 <body>
+  <!-- Botão Menu Mobile -->
+<button class="mobile-menu-toggle" id="mobileMenuToggle">
+    <i class="fas fa-bars"></i>
+</button>
 
-<!-- MENU LATERAL FIXO -->
+<!-- Overlay para fechar menu -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<!-- MENU LATERAL -->
+
 <aside class="sidebar">
-  <div class="logo-container">  
-    <img id="logo" src="/imagens/image-removebg-preview (1).png" alt="ecotrace" class="logo">  
+  <div class="logo-container">
+   <a href="index.html"> <img id="logo" src="/imagens/cin.png" alt="EcoTrace" class="logo"> </a>
   </div>
-  <nav class="menu">
-    <p>________</p>
-
- 
-
-
-    <button id="dashboard-home" class="menu-btn"><img class="icone" src="/imagens/graficos.png" alt="graph"></button>
-    <button id="users-btn" class="menu-btn"><img class="icone" src="/imagens/perfilz.png" alt="login"></button>
-    <button id="reports-btn" class="menu-btn"><img class="icone" src="/imagens/docs.png" alt="docs"></button>
-     <p>________</p>
-    <div id="ext">
-    <a id="login" href="forms.html">
-        <img class="icone" src="/imagens/log.png" alt="login">
-      </a>
-      
-      <a id="downloads" href="downloads.html">
-        <img class="icone" src="/imagens/down.png" alt="downloads">
-      </a>
-      <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-      <button id="logout-btn" class="menu-btn logout"><img class="icone-log" src="/imagens/logout.png" alt="docs"></button>
-      </div>
-    </nav>
   
+  <div class="user-info">
+    <div class="user-avatar">
+      <i class="fas fa-user-circle"></i>
+    </div>
+    <div class="user-details">
+      <span class="user-name" id="nome-usuario-sidebar">Carregando...</span>
+      <span class="user-role">Administrador</span>
+    </div>
+  </div>
+  
+  <nav class="menu">
+    <button id="dashboard-home" class="menu-btn active">
+      <i class="fas fa-chart-pie"></i>
+      <span>Dashboard</span>
+    </button>
+    
+    <button id="users-btn" class="menu-btn">
+      <i class="fas fa-users"></i>
+      <span>Usuários</span>
+    </button>
+    
+    <button id="reports-btn" class="menu-btn">
+      <i class="fas fa-file-alt"></i>
+      <span>Relatórios</span>
+    </button>
+    
+    <div class="menu-divider"></div>
+    
+    <a href="forms.html" class="menu-btn link-btn">
+      <i class="fas fa-plus-circle"></i>
+      <span>Novo</span>
+    </a>
+
+     <a href="downloads.html" class="menu-btn link-btn">
+      <i class="fas fa-download"></i>
+
+      <span>Downloads</span>
+    </a>
+    
+    <div class="menu-footer">
+      <button id="logout-btn" class="menu-btn logout">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Sair</span>
+      </button>
+    </div>
+  </nav>
 </aside>
 
 <!-- CONTEÚDO PRINCIPAL -->
 <main class="main-content">
-  <header>
-    <h1>Bem-vindo, <span id="nome-usuario">Admin</span>!</h1>
+  <!-- HEADER -->
+  <header class="main-header">
+    <div class="header-left">
+      <h1>Dashboard EcoTrace</h1>
+      <p class="subtitle">Sistema de Monitoramento de Sustentabilidade</p>
+    </div>
     
+    <div class="header-right">
+      <div class="date-display">
+        <i class="fas fa-calendar-alt"></i>
+        <span id="current-date"></span>
+      </div>
+    </div>
   </header>
 
-  <!-- HOME CARD -->
+  <!-- DASHBOARD -->
   <section id="home-card" class="card active">
-    <h2>Visão Geral do Sistema</h2>
-    <div class="kpis">
-      <div class="kpi">
-        <h3>Total de Diagnósticos</h3>
-        <span id="kpi-total">0</span>
-      </div>
-      <div class="kpi">
-        <h3>Média Geral</h3>
-        <span id="kpi-media">0%</span>
-      </div>
-      <div class="kpi">
-        <h3>Categoria mais comum</h3>
-        <span id="kpi-categoria">–</span>
+    <div class="card-header">
+      <h2><i class="fas fa-tachometer-alt"></i> Visão Geral</h2>
+      <div class="card-actions">
+        <button class="btn-icon" id="refresh-data" title="Atualizar">
+          <i class="fas fa-redo"></i>
+        </button>
       </div>
     </div>
-
-    <div class="charts-box">
-      <div class="chart-container">
-        <h3>Distribuição por Categoria</h3>
-        <canvas id="chart-categorias"></canvas>
+    
+    <!-- KPI CARDS -->
+    <div class="kpis-grid">
+      <div class="kpi-card primary">
+        <div class="kpi-icon">
+          <i class="fas fa-clipboard-list"></i>
+        </div>
+        <div class="kpi-content">
+          <h3>Total de Diagnósticos</h3>
+          <span id="kpi-total" class="kpi-value">0</span>
+        </div>
       </div>
-      <div class="chart-container">
-        <h3>Média de Pontuação por Categoria</h3>
-        <canvas id="chart-medias"></canvas>
+      
+      <div class="kpi-card success">
+        <div class="kpi-icon">
+          <i class="fas fa-chart-line"></i>
+        </div>
+        <div class="kpi-content">
+          <h3>Média Geral</h3>
+          <span id="kpi-media" class="kpi-value">0%</span>
+        </div>
       </div>
-      <div class="chart-container">
-        <h3>Nível Geral de Sustentabilidade (%)</h3>
-        <canvas id="chart-radial"></canvas>
+      
+      <div class="kpi-card warning">
+        <div class="kpi-icon">
+          <i class="fas fa-star"></i>
+        </div>
+        <div class="kpi-content">
+          <h3>Categoria Mais Comum</h3>
+          <span id="kpi-categoria" class="kpi-value">-</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- CHARTS -->
+    <div class="charts-container">
+      <div class="chart-card">
+        <div class="chart-header">
+          <h3><i class="fas fa-chart-pie"></i> Distribuição</h3>
+        </div>
+        <div class="chart-wrapper">
+          <canvas id="chart-categorias"></canvas>
+        </div>
+      </div>
+      
+      <div class="chart-card">
+        <div class="chart-header">
+          <h3><i class="fas fa-chart-line"></i> Médias</h3>
+        </div>
+        <div class="chart-wrapper">
+          <canvas id="chart-medias"></canvas>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- USERS CARD -->
+  <!-- USUÁRIOS -->
   <section id="users-card" class="card">
-    <h2>Gerenciar Usuários</h2>
-    <table id="users-table">
-      <thead>
-        <tr><th>Nome</th><th>Email</th><th>Permissão</th><th>Ações</th></tr>
-      </thead>
-      <tbody></tbody>
-    </table>
+    <div class="card-header">
+      <h2><i class="fas fa-users"></i> Gerenciar Usuários</h2>
+    </div>
+    
+    <div class="table-container">
+      <table id="users-table">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>Permissão</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody id="users-tbody">
+          <tr class="loading-row">
+            <td colspan="4">
+              <div class="loading-spinner">
+                <i class="fas fa-spinner fa-spin"></i>
+                <span>Carregando usuários...</span>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </section>
 
-  <!-- REPORTS CARD -->
+  <!-- RELATÓRIOS -->
   <section id="reports-card" class="card">
-    <h2>Relatórios Recentes</h2>
-    <div class="reports-actions">
-      <button id="btn-export-pdf" class="btn-fancy">Exportar PDF</button>
+    <div class="card-header">
+      <h2><i class="fas fa-file-alt"></i> Relatórios</h2>
+      <div class="card-actions">
+        <button class="btn-primary" id="export-pdf">
+          <i class="fas fa-download"></i> Exportar CSV
+        </button>
+      </div>
     </div>
-    <table id="reports-table">
-      <thead>
-        <tr><th>Empresa</th><th>Data</th><th>Pontuação</th><th>Categoria</th></tr>
-      </thead>
-      <tbody></tbody>
-    </table>
+    
+    <div class="table-container">
+      <table id="reports-table">
+        <thead>
+          <tr>
+            <th>Empresa</th>
+            <th>Data</th>
+            <th>Pontuação</th>
+            <th>Categoria</th>
+          </tr>
+        </thead>
+        <tbody id="reports-tbody">
+          <tr class="loading-row">
+            <td colspan="4">
+              <div class="loading-spinner">
+                <i class="fas fa-spinner fa-spin"></i>
+                <span>Carregando relatórios...</span>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </section>
 </main>
 
-<!-- Notificação -->
-<div class="notificacao" id="notificacao"></div>
+<!-- NOTIFICAÇÃO -->
+<div class="notificacao" id="notificacao" aria-live="polite">
+  <i class="fas fa-check-circle"></i>
+  <span class="notif-text"></span>
+</div>
 
-<!-- JS -->
+<!-- SCRIPT -->
 <script type="module">
-// ---------------- FIREBASE ----------------
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
-import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
-import { getFirestore, collection, getDocs, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
-
-const firebaseConfig = {
+// Configurações (mantenha os seus valores)
+const FIREBASE_CONFIG = {
     apiKey: "AIzaSyAe7mU1MyCwrBmJlm89cKM-WHONzeqyU3w",
     authDomain: "projeto-ecotrace.firebaseapp.com",
     projectId: "projeto-ecotrace",
@@ -133,146 +247,531 @@ const firebaseConfig = {
     measurementId: "G-RTWLGJD188"
 };
 
-const app = initializeApp(firebaseConfig);
+// Importações Firebase
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+import { getFirestore, collection, getDocs, doc, updateDoc, deleteDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+
+// Inicializar Firebase
+const app = initializeApp(FIREBASE_CONFIG);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// ---------------- ELEMENTOS ----------------
-const nomeUsuarioSpan = document.getElementById("nome-usuario");
-const logoutBtn = document.getElementById("logout-btn");
-let notificou = false;
+// Variáveis globais
+let charts = {};
+let currentUser = null;
 
-function mostrarNotificacao(texto){
-  const notif = document.getElementById("notificacao");
-  notif.textContent = texto;
-  notif.classList.add("show");
-  setTimeout(()=>notif.classList.remove("show"), 3000);
+// Elementos DOM
+const elements = {
+    userSidebar: document.getElementById('nome-usuario-sidebar'),
+    currentDate: document.getElementById('current-date'),
+    notificacao: document.getElementById('notificacao'),
+    notifText: document.querySelector('.notif-text'),
+    notifIcon: document.querySelector('#notificacao i'),
+    kpiTotal: document.getElementById('kpi-total'),
+    kpiMedia: document.getElementById('kpi-media'),
+    kpiCategoria: document.getElementById('kpi-categoria'),
+    usersTbody: document.getElementById('users-tbody'),
+    reportsTbody: document.getElementById('reports-tbody')
+};
+
+// Inicialização
+function init() {
+    setupEventListeners();
+    updateCurrentDate();
+    setInterval(updateCurrentDate, 60000);
+    setupAuth();
 }
 
-// Troca de cards
-const buttons = [
-  {btn:'dashboard-home', card:'home-card'},
-  {btn:'users-btn', card:'users-card'},
-  {btn:'reports-btn', card:'reports-card'},
-];
-buttons.forEach(item=>{
-  const btn=document.getElementById(item.btn);
-  const card=document.getElementById(item.card);
-  btn.addEventListener("click", ()=>{
-    document.querySelectorAll('.card').forEach(c=>c.classList.remove('active'));
-    card.classList.add('active');
-  });
-});
+// Configurar Event Listeners
+function setupEventListeners() {
+    // Navegação
+    document.getElementById('dashboard-home').addEventListener('click', () => showSection('home-card'));
+    document.getElementById('users-btn').addEventListener('click', () => showSection('users-card'));
+    document.getElementById('reports-btn').addEventListener('click', () => showSection('reports-card'));
+    
+    // Botões de ação
+    document.getElementById('logout-btn').addEventListener('click', handleLogout);
+    document.getElementById('refresh-data').addEventListener('click', refreshAllData);
+    document.getElementById('export-pdf').addEventListener('click', exportReports);
+}
 
-// Logout
-logoutBtn.addEventListener("click", ()=> window.location.href="index.html");
-
-// Carregar dados
-onAuthStateChanged(auth, async (user)=>{
-  if(user){
-    nomeUsuarioSpan.textContent = user.displayName || user.email.split("@")[0];
-    if(!notificou){ mostrarNotificacao(`Bem-vindo de volta, ${nomeUsuarioSpan.textContent}!`); notificou=true; }
-    await carregarUsuarios();
-    await carregarDiagnosticos();
-    await carregarRelatorios();
-  } else { window.location.href="index.html"; }
-});
-
-// ---------------- FUNÇÕES ----------------
-async function carregarUsuarios(){
-  const tbody = document.querySelector("#users-table tbody");
-  tbody.innerHTML="";
-  const snapshot = await getDocs(collection(db,"usuarios"));
-  snapshot.forEach(docSnap=>{
-    const data = docSnap.data();
-    const tr = document.createElement("tr");
-    tr.innerHTML=`
-      <td>${data.nome||'Sem nome'}</td>
-      <td>${data.email}</td>
-      <td>${data.role||'user'}</td>
-      <td>
-        <button class="action-btn admin-btn">${data.role==='admin'?'Rebaixar':'Promover'}</button>
-        <button class="action-btn delete-btn">Excluir</button>
-      </td>
-    `;
-    tr.querySelector(".admin-btn").addEventListener("click", async ()=>{
-      const novoRole = data.role==='admin'?'user':'admin';
-      await updateDoc(doc(db,"usuarios",docSnap.id),{role:novoRole});
-      mostrarNotificacao(`Usuário ${data.email} agora é ${novoRole}`);
-      carregarUsuarios();
+// Autenticação
+function setupAuth() {
+    onAuthStateChanged(auth, async (user) => {
+        if (!user) {
+            window.location.href = "index.html";
+            return;
+        }
+        
+        currentUser = user;
+        elements.userSidebar.textContent = user.displayName || (user.email ? user.email.split('@')[0] : 'Usuário');
+        showNotification(`Bem-vindo, ${elements.userSidebar.textContent}!`, 'success');
+        
+        // Carregar dados iniciais
+        await Promise.all([
+            loadDashboardData(),
+            loadUsers(),
+            loadReports()
+        ]);
     });
-    tr.querySelector(".delete-btn").addEventListener("click", async ()=>{
-      if(confirm(`Deseja realmente excluir ${data.email}?`)){
-        await deleteDoc(doc(db,"usuarios",docSnap.id));
-        mostrarNotificacao(`Usuário ${data.email} excluído`);
-        carregarUsuarios();
-      }
+}
+
+// Funções de utilidade
+function updateCurrentDate() {
+    const now = new Date();
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    elements.currentDate.textContent = now.toLocaleDateString('pt-BR', options);
+}
+
+let notifTimeout = null;
+function showNotification(message, type = 'info', duration = 3000) {
+    elements.notifText.textContent = message;
+    elements.notificacao.className = `notificacao show ${type}`;
+    elements.notifIcon.className = type === 'success' ? 'fas fa-check-circle' :
+                                  type === 'error' ? 'fas fa-exclamation-circle' :
+                                  'fas fa-info-circle';
+    if (notifTimeout) clearTimeout(notifTimeout);
+    notifTimeout = setTimeout(() => {
+        elements.notificacao.classList.remove('show');
+    }, duration);
+}
+
+function showSection(sectionId) {
+    // Atualizar menu
+    document.querySelectorAll('.menu-btn').forEach(btn => btn.classList.remove('active'));
+    const btnMap = {
+        'home-card': 'dashboard-home',
+        'users-card': 'users-btn',
+        'reports-card': 'reports-btn'
+    };
+    if (btnMap[sectionId]) {
+        const el = document.getElementById(btnMap[sectionId]);
+        if (el) el.classList.add('active');
+    }
+    
+    // Mostrar seção
+    document.querySelectorAll('.card').forEach(card => card.classList.remove('active'));
+    const target = document.getElementById(sectionId);
+    if (target) target.classList.add('active');
+}
+
+// Funções de dados
+async function refreshAllData() {
+    showNotification('Atualizando dados...', 'info', 5000);
+    try {
+        await Promise.all([
+            loadDashboardData(),
+            loadUsers(),
+            loadReports()
+        ]);
+        showNotification('Dados atualizados!', 'success');
+    } catch (error) {
+        showNotification('Erro ao atualizar dados', 'error');
+        console.error(error);
+    }
+}
+
+async function loadDashboardData() {
+    try {
+        const snapshot = await getDocs(collection(db, "diagnosticos"));
+        
+        // Inicializar contadores
+        const categories = {
+            "Líder": { count: 0, scores: [] },
+            "Avançado": { count: 0, scores: [] },
+            "Transição": { count: 0, scores: [] },
+            "Iniciante": { count: 0, scores: [] },
+            "Atenção": { count: 0, scores: [] }
+        };
+        
+        let total = 0;
+        let totalScore = 0;
+        
+        // Processar dados
+        snapshot.forEach(docSnap => {
+            const data = docSnap.data ? docSnap.data() : {};
+            const score = Number(data.pontuacao ?? 0);
+            
+            total++;
+            totalScore += score;
+            
+            // Categorizar
+            if (score >= 90) {
+                categories["Líder"].count++;
+                categories["Líder"].scores.push(score);
+            } else if (score >= 75) {
+                categories["Avançado"].count++;
+                categories["Avançado"].scores.push(score);
+            } else if (score >= 60) {
+                categories["Transição"].count++;
+                categories["Transição"].scores.push(score);
+            } else if (score >= 40) {
+                categories["Iniciante"].count++;
+                categories["Iniciante"].scores.push(score);
+            } else {
+                categories["Atenção"].count++;
+                categories["Atenção"].scores.push(score);
+            }
+        });
+        
+        // Atualizar KPIs
+        const average = total > 0 ? (totalScore / total) : 0;
+        const averageRounded = average ? average.toFixed(1) : 0;
+        const mostCommon = total > 0 ? Object.entries(categories)
+            .sort((a, b) => b[1].count - a[1].count)[0][0] : '-';
+        
+        elements.kpiTotal.textContent = total;
+        elements.kpiMedia.textContent = `${averageRounded}%`;
+        elements.kpiCategoria.textContent = mostCommon;
+        
+        // Criar/atualizar gráficos
+        createCharts(categories);
+        
+    } catch (error) {
+        console.error('Erro ao carregar dashboard:', error);
+        showNotification('Erro ao carregar dados do dashboard', 'error');
+    }
+}
+
+function createCharts(categories) {
+    // Destruir gráficos existentes
+    Object.values(charts).forEach(chart => chart && chart.destroy());
+    charts = {};
+    
+    // Map de cores alinhado às labels
+    const colorMap = {
+        "Líder": '#4caf50',
+        "Avançado": '#2196f3',
+        "Transição": '#ff9800',
+        "Iniciante": '#f44336',
+        "Atenção": '#9c27b0'
+    };
+    
+    const labels = Object.keys(categories);
+    const counts = labels.map(lbl => categories[lbl].count);
+    const averages = labels.map(lbl => {
+        const scores = categories[lbl].scores;
+        return scores.length ? (scores.reduce((a,b) => a + b, 0) / scores.length) : 0;
+    }).map(v => Number(v.toFixed(1)));
+    
+    try {
+        // Pizza - distribuição
+        const ctxPie = document.getElementById('chart-categorias').getContext('2d');
+        charts.pie = new Chart(ctxPie, {
+            type: 'pie',
+            data: {
+                labels,
+                datasets: [{
+                    data: counts,
+                    backgroundColor: labels.map(l => colorMap[l]),
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom', labels: { color: '#c7d8f2', padding: 20 } }
+                }
+            }
+        });
+    } catch (err) {
+        console.error('Erro criando gráfico de pizza:', err);
+    }
+    
+    try {
+        // Linha - médias
+        const ctxLine = document.getElementById('chart-medias').getContext('2d');
+        charts.line = new Chart(ctxLine, {
+            type: 'line',
+            data: {
+                labels,
+                datasets: [{
+                    label: 'Média por Categoria',
+                    data: averages,
+                    borderColor: '#24df37',
+                    backgroundColor: 'rgba(36, 223, 55, 0.1)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: { callback: v => v + '%' }
+                    }
+                },
+                plugins: {
+                    legend: { display: false }
+                }
+            }
+        });
+    } catch (err) {
+        console.error('Erro criando gráfico de médias:', err);
+    }
+}
+
+async function loadUsers() {
+    const tbody = elements.usersTbody;
+    tbody.innerHTML = '<tr class="loading-row"><td colspan="4">Carregando...</td></tr>';
+    
+    try {
+        const snapshot = await getDocs(collection(db, "usuarios"));
+        
+        if (snapshot.empty) {
+            tbody.innerHTML = '<tr class="empty-state"><td colspan="4">Nenhum usuário encontrado</td></tr>';
+            return;
+        }
+        
+        let html = '';
+        snapshot.forEach(docSnap => {
+            const data = docSnap.data();
+            const id = docSnap.id;
+            const isAdmin = data.role === 'admin';
+            const safeName = escapeHtml(data.nome || 'Sem nome');
+            const safeEmail = escapeHtml(data.email || '');
+            
+            html += `
+                <tr>
+                    <td>${safeName}</td>
+                    <td>${safeEmail}</td>
+                    <td><span class="badge ${isAdmin ? 'badge-admin' : 'badge-user'}">${escapeHtml(data.role || 'user')}</span></td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="action-btn ${isAdmin ? 'demote-btn' : 'promote-btn'}" 
+                                    data-userid="${id}" data-isadmin="${isAdmin}">
+                                <i class="fas fa-${isAdmin ? 'arrow-down' : 'arrow-up'}"></i>
+                            </button>
+                            <button class="action-btn delete-btn" data-userid-delete="${id}" data-user-email="${safeEmail}">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `;
+        });
+        
+        tbody.innerHTML = html;
+        
+        // Delegação de eventos (melhor que inline onclick)
+        tbody.querySelectorAll('[data-userid]').forEach(btn => {
+            btn.onclick = () => {
+                const userId = btn.getAttribute('data-userid');
+                const isAdmin = btn.getAttribute('data-isadmin') === 'true';
+                toggleUserRole(userId, isAdmin);
+            };
+        });
+        tbody.querySelectorAll('[data-userid-delete]').forEach(btn => {
+            btn.onclick = () => {
+                const userId = btn.getAttribute('data-userid-delete');
+                const userEmail = btn.getAttribute('data-user-email');
+                deleteUser(userId, userEmail);
+            };
+        });
+        
+    } catch (error) {
+        console.error('Erro ao carregar usuários:', error);
+        tbody.innerHTML = '<tr class="error-state"><td colspan="4">Erro ao carregar usuários</td></tr>';
+    }
+}
+
+async function loadReports() {
+    const tbody = elements.reportsTbody;
+    tbody.innerHTML = '<tr class="loading-row"><td colspan="4">Carregando...</td></tr>';
+    
+    try {
+        // Ordenar por data, se existir
+        const q = query(collection(db, "diagnosticos"), /* orderBy('data', 'desc') */);
+        const snapshot = await getDocs(q);
+        
+        if (snapshot.empty) {
+            tbody.innerHTML = '<tr class="empty-state"><td colspan="4">Nenhum relatório encontrado</td></tr>';
+            return;
+        }
+        
+        let html = '';
+        snapshot.forEach(docSnap => {
+            const data = docSnap.data();
+            const score = Number(data.pontuacao ?? 0);
+            
+            // Determinar categoria
+            let category = 'Atenção';
+            let badgeClass = 'badge-atencao';
+            if (score >= 90) { category = 'Líder'; badgeClass = 'badge-lider'; }
+            else if (score >= 75) { category = 'Avançado'; badgeClass = 'badge-avancado'; }
+            else if (score >= 60) { category = 'Transição'; badgeClass = 'badge-transicao'; }
+            else if (score >= 40) { category = 'Iniciante'; badgeClass = 'badge-iniciante'; }
+            
+            // Formatar data robustamente
+            let formattedDate = 'N/A';
+            if (data.data) {
+                // Se for Timestamp do Firestore
+                if (data.data.seconds !== undefined) {
+                    formattedDate = new Date(data.data.seconds * 1000).toLocaleDateString('pt-BR');
+                } else {
+                    // Tenta parse como string ou número
+                    const d = new Date(data.data);
+                    if (!isNaN(d)) formattedDate = d.toLocaleDateString('pt-BR');
+                    else formattedDate = String(data.data);
+                }
+            }
+            
+            html += `
+                <tr>
+                    <td>${escapeHtml(data.empresa || 'Não informado')}</td>
+                    <td>${formattedDate}</td>
+                    <td>${score}%</td>
+                    <td><span class="badge ${badgeClass}">${category}</span></td>
+                </tr>
+            `;
+        });
+        
+        tbody.innerHTML = html;
+        
+    } catch (error) {
+        console.error('Erro ao carregar relatórios:', error);
+        tbody.innerHTML = '<tr class="error-state"><td colspan="4">Erro ao carregar relatórios</td></tr>';
+    }
+}
+
+// Funções de ação (anexadas ao escopo global via window onde necessário)
+window.toggleUserRole = async function(userId, isAdmin) {
+    if (!confirm(`Tem certeza que deseja ${isAdmin ? 'rebaixar' : 'promover'} este usuário?`)) return;
+    
+    try {
+        const newRole = isAdmin ? 'user' : 'admin';
+        await updateDoc(doc(db, "usuarios", userId), { role: newRole });
+        showNotification(`Usuário ${isAdmin ? 'rebaixado' : 'promovido'} com sucesso!`, 'success');
+        loadUsers();
+    } catch (error) {
+        showNotification('Erro ao alterar permissão', 'error');
+        console.error(error);
+    }
+};
+
+window.deleteUser = async function(userId, userEmail) {
+    if (!confirm(`Tem certeza que deseja excluir o usuário ${userEmail}?`)) return;
+    
+    try {
+        await deleteDoc(doc(db, "usuarios", userId));
+        showNotification('Usuário excluído com sucesso!', 'success');
+        loadUsers();
+    } catch (error) {
+        showNotification('Erro ao excluir usuário', 'error');
+        console.error(error);
+    }
+};
+
+async function handleLogout() {
+    try {
+        await signOut(auth);
+        showNotification('Logout realizado com sucesso!', 'success', 1000);
+        setTimeout(() => window.location.href = "index.html", 1000);
+    } catch (error) {
+        showNotification('Erro ao fazer logout', 'error');
+    }
+}
+
+// Exportar relatórios -> gera CSV e baixa
+async function exportReports() {
+    showNotification('Gerando CSV...', 'info');
+    try {
+        const snapshot = await getDocs(collection(db, "diagnosticos"));
+        if (snapshot.empty) {
+            showNotification('Nenhum relatório para exportar', 'error');
+            return;
+        }
+        const rows = [];
+        rows.push(['Empresa', 'Data', 'Pontuação', 'Categoria']);
+        snapshot.forEach(docSnap => {
+            const data = docSnap.data();
+            const score = Number(data.pontuacao ?? 0);
+            let category = 'Atenção';
+            if (score >= 90) category = 'Líder';
+            else if (score >= 75) category = 'Avançado';
+            else if (score >= 60) category = 'Transição';
+            else if (score >= 40) category = 'Iniciante';
+            
+            let formattedDate = '';
+            if (data.data) {
+                if (data.data.seconds !== undefined) formattedDate = new Date(data.data.seconds * 1000).toLocaleDateString('pt-BR');
+                else {
+                    const d = new Date(data.data);
+                    formattedDate = !isNaN(d) ? d.toLocaleDateString('pt-BR') : String(data.data);
+                }
+            }
+            rows.push([data.empresa || '', formattedDate, `${score}%`, category]);
+        });
+        
+        // Converter para CSV
+        const csvContent = rows.map(r => r.map(cell => `"${String(cell).replace(/"/g,'""')}"`).join(',')).join('\n');
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `relatorios_ecotrace_${new Date().toISOString().slice(0,10)}.csv`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+        showNotification('CSV exportado com sucesso!', 'success');
+    } catch (error) {
+        console.error('Erro exportando relatórios:', error);
+        showNotification('Erro ao exportar relatórios', 'error');
+    }
+}
+
+// Utility: escape HTML para evitar injeção ao montar innerHTML
+function escapeHtml(unsafe) {
+    if (unsafe === null || unsafe === undefined) return '';
+    return String(unsafe)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+}
+
+// Inicializar aplicação
+document.addEventListener('DOMContentLoaded', init);
+</script>
+
+
+<script>
+
+  // Controle do menu mobile
+const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+const sidebar = document.querySelector('.sidebar');
+const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+if (mobileMenuToggle && sidebar && sidebarOverlay) {
+    mobileMenuToggle.addEventListener('click', () => {
+        sidebar.classList.toggle('active');
+        sidebarOverlay.classList.toggle('active');
     });
-    tbody.appendChild(tr);
-  });
+    
+    sidebarOverlay.addEventListener('click', () => {
+        sidebar.classList.remove('active');
+        sidebarOverlay.classList.remove('active');
+    });
+    
+    // Fechar menu ao clicar em um link
+    document.querySelectorAll('.menu-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            if (window.innerWidth <= 991) {
+                sidebar.classList.remove('active');
+                sidebarOverlay.classList.remove('active');
+            }
+        });
+    });
 }
-
-async function carregarDiagnosticos(){
-  const snapshot = await getDocs(collection(db,"diagnosticos"));
-  const categorias = ["Líder","Avançado","Transição","Iniciante","Atenção"];
-  const scoresPorCategoria = { "Líder":[], "Avançado":[], "Transição":[], "Iniciante":[], "Atenção":[] };
-  let total=0, soma=0;
-
-  snapshot.forEach(docSnap=>{
-    const data=docSnap.data();
-    const score = data.pontuacao || 0;
-    soma += score; total++;
-    if(score>=90) scoresPorCategoria["Líder"].push(score);
-    else if(score>=75) scoresPorCategoria["Avançado"].push(score);
-    else if(score>=60) scoresPorCategoria["Transição"].push(score);
-    else if(score>=40) scoresPorCategoria["Iniciante"].push(score);
-    else scoresPorCategoria["Atenção"].push(score);
-  });
-
-  document.getElementById("kpi-total").textContent = total;
-  document.getElementById("kpi-media").textContent = (soma/total).toFixed(1) + "%";
-  const categoriaMaisComum = Object.entries(scoresPorCategoria).sort((a,b)=>b[1].length-a[1].length)[0][0];
-  document.getElementById("kpi-categoria").textContent = categoriaMaisComum;
-
-  new Chart(document.getElementById("chart-categorias"), {
-    type:"pie",
-    data:{ labels:Object.keys(scoresPorCategoria), datasets:[{ data:Object.values(scoresPorCategoria).map(a=>a.length), backgroundColor:["#4caf50","#2196f3","#ff9800","#f44336","#9c27b0"] }] }
-  });
-
-  new Chart(document.getElementById("chart-medias"), {
-    type:"line",
-    data:{ labels:Object.keys(scoresPorCategoria), datasets:[{ data:Object.values(scoresPorCategoria).map(a=>a.length? (a.reduce((x,y)=>x+y)/a.length).toFixed(1):0), backgroundColor:"#009f6b" }] },
-    options:{ scales:{ y:{ beginAtZero:true, max:100 } } }
-  });
-
-  new Chart(document.getElementById("chart-radial"), {
-    type:"doughnut",
-    data:{ labels:["Nível Global"], datasets:[{ data:[soma/total,100-soma/total], backgroundColor:["#009f6b","#ddd"] }] }
-  });
-}
-
-async function carregarRelatorios(){
-  const tbody = document.querySelector("#reports-table tbody");
-  tbody.innerHTML="";
-  const snapshot = await getDocs(collection(db,"diagnosticos"));
-  snapshot.docs.sort((a,b)=>b.data().data?.seconds-a.data().data?.seconds).forEach(docSnap=>{
-    const data=docSnap.data();
-    const tr = document.createElement("tr");
-    tr.innerHTML=`
-      <td>${data.empresa||'-'}</td>
-      <td>${data.data? new Date(data.data.seconds*1000).toLocaleDateString():'-'}</td>
-      <td>${data.pontuacao}%</td>
-      <td>${data.pontuacao>=90?"Líder":data.pontuacao>=75?"Avançado":data.pontuacao>=60?"Transição":data.pontuacao>=40?"Iniciante":"Atenção"}</td>
-    `;
-    tbody.appendChild(tr);
-  });
-  document.getElementById("btn-export-pdf").addEventListener("click", ()=> alert("Função de exportar PDF implementável."));
-}
-
-document.getElementById("btn-salvar-config").addEventListener("click", ()=>{
-  const itens=parseInt(document.getElementById("itens-por-pagina").value);
-  mostrarNotificacao(`Configurações salvas: ${itens} itens por página`);
-});
 </script>
 </body>
 </html>
